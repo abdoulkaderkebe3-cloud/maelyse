@@ -1,59 +1,49 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-08-31 21:10
+> Dernière mise à jour : 2026-08-31 23:45
 
 ## État global
-**L'invitation est EN LIGNE : https://maelyse.vercel.app**
-Enveloppe d'accueil, animations au défilement, passe de performance faite et mesurée. Vérifiée au navigateur en 390px et en 1440px, 0 erreur console, 0 débordement horizontal.
+**L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
 
-La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
+**Plus rien ne bloque l'envoi du lien.** Le dernier point ouvert, le nom du lieu, est tranché : ce sera « Abidjan », rien de plus (D-026).
 
-⚠️ **Le lien ne peut toujours pas être envoyé aux invités.** Trois choses manquent, toutes dans `src/data/invitation.ts` :
-1. `whatsappNumber` : sans lui le bouton de réponse ne fait rien
-2. `startTime` / `endTime` : la ligne Time affiche « Time to be confirmed »
-3. `plan`, `dressCodeValue` et `giftValue` : contenus proposés par Claude, à relire (voir D-015)
+⚠️ **Tout ce travail n'est pas encore en ligne.** Le dernier `git push` date de 20:25, donc https://maelyse.vercel.app affiche encore l'ancienne version : ancien programme, ancienne heure, formulaire de réponse toujours présent. **Un commit et un push suffisent à publier.**
+
+La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 
 ## Fait
-- [x] Structure de continuité, 15 décisions actées (D-001 à D-015)
+- [x] Structure de continuité, 27 décisions actées (D-001 à D-027)
 - [x] Vite 8 + React 19 + TypeScript strict + Tailwind v4
-- [x] Tout le contenu centralisé dans `src/data/invitation.ts`
-- [x] 7 sections : enveloppe, hero, compte à rebours, informations, déroulé, lieu, réponse, partage
-- [x] **Ouverture cinématique** (D-017) : l'enveloppe arrive de loin en tournant, étincelles en orbite, onde de choc, la lettre sort puis grandit jusqu'à remplir l'écran
-- [x] **Ciel vivant** : étoiles et ballons qui montent, dans un seul canvas
-- [x] **Gâteau interactif à 9 bougies** à souffler une par une, fumée, confettis
-- [x] Bandeau défilant, nom et titres révélés lettre par lettre, reflet mobile sur le 9
-- [x] **Le décor était invisible depuis le premier jour** (D-018), corrigé : le fond opaque du `body` recouvrait tout le z-index négatif
-- [x] **Animations au défilement** : parallaxe du hero, titres révélés mot par mot, cascades, compteur à rouleau, filet de progression
-- [x] **Passe de performance mesurée** à 6x processeur et 4G lente (D-014)
-- [x] Carte cliquable qui ouvre Google Maps, assombrie par filtre CSS
-- [x] Formulaire de réponse avec ses 5 états, message WhatsApp pré-rempli, confettis
-- [x] Partage natif, image d'aperçu WhatsApp à 63 Ko, noindex, traduction bloquée
-- [x] Poussé sur `github.com/abdoulkaderkebe3-cloud/maelyse`, dépôt relié à Vercel
-- [x] Déployé et vérifié public en HTTP hors session connectée
+- [x] **`src/config.ts`, fichier de configuration unique** (D-021) : palette, fête, lieu, jeu, son, programme, tous les textes. Il remplace `src/data/invitation.ts`
+- [x] **Ouverture cinématique** `Intro.tsx`, première visite seulement
+- [x] **Son d'ambiance** discret, jamais automatique, démarré au premier geste (D-022)
+- [x] **Jeu des neuf étincelles** : huit cachées dans la page, la neuvième sur le gâteau, `Victory` et feux d'artifice à la fin (D-022)
+- [x] Ciel vivant, gâteau interactif à 9 bougies, bandeau défilant, animations au défilement
+- [x] Passe de performance mesurée à 6x processeur et 4G lente (D-014, D-019)
+- [x] Carte cliquable vers Google Maps, repère dessiné, coordonnées jamais affichées
+- [x] Partage natif, aperçu WhatsApp à 63 Ko, noindex, traduction bloquée
+- [x] **Heure de début : 14h.** `dateISO` corrigé de 15h à 14h UTC, le compte à rebours visait une heure fausse (D-023)
+- [x] **Aucune heure de fin annoncée**, choix de Kader. La ligne Time affiche « From 2:00 PM » (D-023)
+- [x] **Formulaire de réponse supprimé** et ligne « For parents » retirée, sur décision de Kader (D-024)
+- [x] Hero ramené à **un seul bouton, « See the place »**, barre fixe basse rebranchée sur le bloc lieu
+- [x] **Programme réel** : accueil, natation, poterie, gâteau (D-025)
+- [x] « Dress code » devient **« What to bring »** : maillot, serviette, rechange
+- [x] **Lieu réduit à « Abidjan »** (D-026), l'adresse devient facultative dans le code et la précision est portée par le bouton Maps
+- [x] **Gâteau corrigé** (D-027) : les bougies des extrémités flottaient à côté du glaçage, les deux étages avaient presque la même largeur, les coulures du bas formaient des dents sombres, le plat ne débordait qu'à droite
+- [x] **Trait noir retiré du compte à rebours** (D-027) : un filet quasi noir barrait le milieu de chaque chiffre
+- [x] Meta description et Open Graph mis à jour, ils ne promettent plus de répondre
+- [x] Build vert (`npm run build`), vérifié au navigateur en 390px et 1440px, **0 erreur console, 0 débordement horizontal**
 
 ## En cours
-- [ ] Attente des informations manquantes de Kader (heure, numéro WhatsApp, validation du déroulé)
+- [ ] Rien. Le code est propre et vérifié, il attend d'être commité et poussé.
 
 ## À faire (priorisé)
-- [ ] **Renseigner `whatsappNumber`** (bloquant)
-- [ ] **Renseigner `startTime` et `endTime`** (bloquant)
-- [ ] **Relire le déroulé, le code vestimentaire et la mention cadeaux** (inventés par Claude, D-015, réécrits en D-016)
-- [ ] Tester sur un vrai téléphone : aperçu WhatsApp, ouverture de Maps, envoi d'une réponse réelle
-- [ ] Si besoin après test réel : alléger `motion` via LazyMotion (~113 Ko gzippés aujourd'hui)
+- [ ] **Commit et push** de tout le travail non sauvegardé (la refonte de la session précédente + les changements d'aujourd'hui). Le push redéploie automatiquement.
+- [ ] Tester sur un vrai téléphone : aperçu WhatsApp du lien, ouverture de Google Maps, son, jeu des étincelles
+- [ ] Optionnel : alléger `motion` via LazyMotion (~120 Ko gzippés aujourd'hui). **À ne pas tenter avant la fête.**
 - [ ] Optionnel : ajout au calendrier (.ics), galerie photo
 
 ## Décisions clés prises (voir DECISIONS.md pour détails)
-- D-001 stack React + Vite + TS + Tailwind v4
-- D-002 réponses par WhatsApp pré-rempli, aucun backend
-- D-003 direction artistique néon, ambiance disco magique
-- D-004 on construit l'invitation, pas la vitrine du brief
-- D-005 le RSVP temps réel est abandonné
-- D-006 l'échéance du 4 septembre arbitre tout
-- D-007 site en anglais, textes destinés aux parents
-- D-008 animations avec `motion`
-- D-009 dépôt `maelyse`, déploiement Vercel
-- D-010 noindex et traduction automatique bloquée
-- D-011 carte Google Maps assombrie par filtre CSS
-- D-012 URL publique maelyse.vercel.app, piège de la protection de déploiement
+- D-001 à D-012 : stack, pas de backend, direction artistique, anglais, Vercel, noindex
 - D-013 enveloppe d'accueil, première visite seulement
 - D-014 passe de performance, la fluidité prime sur l'effet
 - D-015 section déroulé, contenu proposé à valider
@@ -62,27 +52,33 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - D-018 LE défaut de fond : le body opaque recouvrait tout le décor
 - D-019 mesures de fluidité, et une erreur de méthode corrigée
 - D-020 ballons volontairement sombres, à cause du contraste du texte
-- D-016 retrait du vocabulaire de soirée, c'est une fête d'enfant
+- **D-021 `src/config.ts`, fichier de configuration unique**
+- **D-022 ouverture cinématique, son et jeu des neuf étincelles** (refonte retrouvée non commitée)
+- **D-023 14h, et aucune heure de fin annoncée**
+- **D-024 retrait du formulaire de réponse et de la ligne « For parents »**
+- **D-025 le programme dit enfin ce qui va se passer : natation et poterie**
+- **D-026 le lieu affiché, c'est « Abidjan », rien de plus**
+- **D-027 gâteau et compte à rebours, quatre défauts que seul l'œil voyait**
 
 ## Pièges rencontrés et solutions
+- **Un travail non commité n'existe pas.** À la reprise du 2026-08-31, deux heures de refonte (config unique, son, jeu des étincelles) ont été retrouvées dans l'arbre de travail : jamais commitées, jamais documentées, et donc absentes du site en ligne alors que PROGRESS.md annonçait le contraire. Commiter est ce qui rend un travail réel.
+- **PROGRESS.md peut mentir.** Il décrivait un état antérieur de deux heures au disque. À chaque reprise, croiser le journal avec `git status` et les dates de modification, pas seulement lire le journal.
+- **Le fuseau se vérifie.** `dateISO` était à 15h UTC pour une fête à 14h à Abidjan, qui est sur GMT. Le compte à rebours se serait trompé d'une heure sans que rien ne le signale.
+- **Retirer une section, c'est retirer tout ce qui pointait dessus.** Supprimer le formulaire imposait aussi le bouton du hero, la cible de la barre fixe basse, l'observateur d'intersection, les textes, le bloc de configuration et la description Open Graph.
+- **`mx-auto` ne centre pas un élément plus large que son parent.** Les marges automatiques ne deviennent jamais négatives : l'élément reste collé à gauche et ne déborde qu'à droite. Il faut `left-1/2` et `-translate-x-1/2`.
+- **Flex rétracte les éléments trop larges sans rien signaler.** Les neuf bougies en `w-8` étaient silencieusement ramenées à 27 px pour remplir la ligne, ce qui masquait le vrai problème : la rangée était plus large que le glaçage sur lequel elle est censée poser.
+- **Une capture pleine page ne montre pas les animations au défilement** : les blocs révélés à l'apparition restent à opacité zéro et la page paraît vide. Injecter une règle qui force l'opacité avant de capturer, sinon on croit à tort que le rendu est cassé.
 - **Le brief mélangeait deux produits** (vitrine et invitation) → tranché en D-004 avant tout code.
-- **« RSVP en temps réel »** impose une base de données → écarté en D-005.
-- **Chrome traduisait la page en français à la volée.** Vu seulement en regardant l'image d'aperçu générée, sortie en français alors que le HTML est en anglais → `translate="no"` et meta notranslate.
-- **La protection de déploiement Vercel rendait le lien inaccessible à tout le monde sauf à Kader.** Invisible depuis un navigateur connecté → rattacher le domaine au projet (`vercel domains add`) et non poser un alias, puis contrôler le code HTTP hors session.
-- **La feuille de style bloquait le premier affichage**, y compris l'enveloppe dessinée en HTML → greffon Vite qui la charge en non bloquant.
-- **Animer un élément flouté** force le recalcul du flou à chaque image, c'était le calcul le plus lourd de la page → halos figés.
+- **Chrome traduisait la page en français à la volée** → `translate="no"` et meta notranslate.
+- **La protection de déploiement Vercel** rendait le lien inaccessible à tous sauf à Kader, invisible depuis un navigateur connecté → contrôler le code HTTP hors session.
 - **Mesurer la performance sur le serveur de développement ne veut rien dire** : 12,8 s en dev contre 5,4 s en production, pour le même code.
-- **La tuile des secondes se vidait** à chaque changement de valeur → compteur à rouleau avec l'ancien et le nouveau chiffre présents en même temps.
-- **L'enveloppe laissait voir la lettre par les côtés** → face avant et rabat construits sur la même géométrie.
-- **Repérer qu'une référence ne colle pas ne suffit pas.** J'avais signalé que « Euphoria » était un univers d'adultes et repositionné l'ambiance visuelle, mais les textes anglais avaient gardé le vocabulaire du brief (piste de danse, boisson, lunettes de soleil). Kader a dû le relever. Corriger une référence impose de la corriger partout où elle a laissé des traces, en particulier dans les mots, qui sont ce que les parents lisent.
-- **Un décor peut être parfaitement dessiné et totalement invisible.** Le fond opaque du `body` se peignait par-dessus tout le z-index négatif. Aucune erreur au build, aucune en console, les éléments existent avec les bonnes dimensions. Ça ne se voit qu'en regardant l'écran.
-- **Une mesure de fluidité faite dans un onglet en arrière-plan ne vaut rien.** J'ai accusé la carte Google intégrée sur cette base et je l'ai retirée. Vérification refaite onglet au premier plan : elle ne coûtait rien. Toujours vérifier le focus, et toujours mesurer une page vide en référence.
-- **Les animations infinies tournent hors écran.** La page en portait une trentaine en permanence, dont 18 pour les flammes des bougies, qui brûlaient pendant qu'on lisait l'adresse deux écrans plus bas.
+- **Une mesure de fluidité dans un onglet en arrière-plan ne vaut rien.** J'ai accusé la carte Google sur cette base et je l'ai retirée à tort.
+- **Les animations infinies tournent hors écran**, dont 18 pour les flammes des bougies pendant qu'on lit l'adresse deux écrans plus bas.
 - **Le heredoc bash cale sur du TSX** → écriture directe de fichier pour ces cas.
 
 ## Notes importantes pour la prochaine session
-Trois champs à remplir ou relire dans `src/data/invitation.ts` et l'invitation part. Ils sont tous commentés en gras dans le fichier.
+Le seul geste qui manque est **commit + push**. Le dépôt est relié au projet Vercel, un push sur `main` redéploie tout seul. Commits en français, **sans trailer de co-auteur**.
 
-Un `git push` sur `main` redéploie automatiquement, le dépôt est relié au projet Vercel.
+Après le push, contrôler que https://maelyse.vercel.app affiche bien « From 2:00 PM », le lieu « Abidjan », le programme natation/poterie, et qu'il n'y a plus de section de réponse.
 
-Le premier levier de performance restant est `motion`, environ un tiers des 113 Ko gzippés. Passer à LazyMotion est mécanique mais à ne pas tenter dans les jours qui précèdent la fête.
+Plus aucun champ n'est en attente dans `src/config.ts`. Tout le contenu est validé par Kader.

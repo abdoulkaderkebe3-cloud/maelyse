@@ -33,8 +33,9 @@ Une invitation livrée après la fête vaut zéro, quelle que soit sa qualité.
 ## Objectifs
 
 1. **Le lien s'ouvre et informe.** Un parent reçoit le lien sur WhatsApp, l'ouvre sur un téléphone souvent modeste, avec une connexion parfois moyenne, et sait en 3 secondes qui, quand et où.
-2. **Il répond.** La confirmation de présence se fait en un geste, sans compte à créer, sans application à installer.
-3. **Il a envie de venir.** L'invitation doit avoir l'air d'un cadeau, pas d'un formulaire.
+2. **Il a envie de venir.** L'invitation doit avoir l'air d'un cadeau, pas d'un formulaire.
+
+> ⚠️ L'objectif « il répond » a été **retiré le 2026-08-31** sur décision de Kader (D-024). Le site ne collecte plus de réponses, les confirmations se font dans la conversation WhatsApp où le lien est partagé.
 
 ---
 
@@ -45,8 +46,8 @@ L'invitée a 9 ans, mais **le lien est ouvert par les parents des camarades**, c
 Conséquence sur toute l'interface :
 
 - Les textes anglais s'adressent aux **parents** (clairs, rassurants, précis sur les horaires), pendant que le **visuel** s'adresse à l'enfant (magique, festif).
-- Un parent a besoin de savoir : à quelle heure ça finit, où c'est exactement, et s'il doit rester ou déposer. Ces informations manquent presque toujours et ce sont celles qu'on redemande par message.
-- Le formulaire de réponse demande le **nom de l'enfant**, pas celui de l'adulte qui remplit.
+- Un parent a besoin de savoir où c'est exactement et ce que son enfant doit emporter. Kader a choisi de ne pas annoncer d'heure de fin (D-023) et de ne pas parler aux parents de rester ou déposer (D-024).
+- Il y a de la **natation** : maillot, serviette et rechange sont une information indispensable, pas un détail.
 
 ---
 
@@ -54,8 +55,8 @@ Conséquence sur toute l'interface :
 
 - **React 19** + **Vite** + **TypeScript** (strict)
 - **Tailwind CSS v4** (tokens dans le bloc `@theme` de `src/index.css`, pas de `tailwind.config.js`)
-- **Pas de backend.** Les réponses partent en message WhatsApp pré-rempli (D-002 et D-005)
-- Déploiement : **Vercel**
+- **Pas de backend.** Et depuis D-024, plus de collecte de réponses du tout
+- Déploiement : **Vercel**, dépôt `github.com/abdoulkaderkebe3-cloud/maelyse` relié au projet, un push sur `main` redéploie
 
 ---
 
@@ -73,7 +74,7 @@ Positionnement retenu : **soirée disco magique**, pas soirée d'adultes. La pal
 
 - TypeScript strict, aucun `any` non justifié
 - Composants fonctionnels, un composant par fichier, nommage `PascalCase`
-- **Tout le contenu affiché vit dans `src/data/invitation.ts`**, jamais en dur dans le JSX. Prénom, âge, date, heures, lieu, textes anglais, numéro WhatsApp. Corriger une heure la veille de la fête doit demander de toucher un seul fichier et une seule ligne.
+- **Tout ce qui est modifiable vit dans `src/config.ts`** (D-021), jamais en dur dans le JSX : palette, prénom, âge, date, heures, lieu, réglages du jeu et du son, programme, tous les textes anglais. Corriger une heure la veille de la fête doit demander de toucher un seul fichier et une seule ligne.
 - Couleurs, espacements et rayons en tokens, jamais de valeur magique
 - Mobile first strict : on code le 390px d'abord, on élargit ensuite en `min-width`
 - Commits en français, sans trailer de co-auteur
@@ -84,35 +85,42 @@ Positionnement retenu : **soirée disco magique**, pas soirée d'adultes. La pal
 
 Les 4 piliers du CLAUDE.md racine s'appliquent. Spécificités :
 
-- **Motif en Z**, page de faible densité : le prénom en haut, la date au centre, le bouton de réponse en bas et atteignable sans scroll, ou en barre fixe basse.
+- **Motif en Z**, page de faible densité : le prénom en haut, la date au centre, le bouton d'action en bas et atteignable sans scroll, ou en barre fixe basse. Depuis D-024 ce bouton unique est « See the place » et descend vers le lieu.
 - **Thème sombre unique**, exception assumée au thème double du workspace. Une invitation de soirée n'a pas de mode clair.
 - **Contraste AA malgré le néon** : le violet saturé sur noir tombe autour de 3:1, il sert donc aux fonds, halos et bordures, jamais au texte courant. Le doré, le turquoise clair et le blanc portent le texte.
 - **Les animations ne bloquent jamais l'information.** L'ouverture d'enveloppe se saute au premier tap et ne se rejoue pas. `transform` et `opacity` uniquement, `prefers-reduced-motion` respecté, page lisible avec toutes les animations coupées.
 - **Poids de la page surveillé.** L'invité est sur un téléphone d'entrée de gamme en 4G moyenne. Pas de vidéo de fond, pas de librairie d'animation lourde, images dimensionnées et compressées.
-- **Les 5 états du formulaire** existent : repos, envoi, succès, erreur, déjà répondu.
+- **Il n'y a plus de formulaire** depuis D-024. La règle des 5 états reste valable pour tout formulaire qui reviendrait.
 
 ---
 
 ## Fonctionnalités
 
-**Indispensables (v1, livrées avant vendredi) :**
-- [ ] Écran d'accueil : prénom, 9 ans, date, heure, lieu, bouton de réponse
-- [ ] Compte à rebours jusqu'au 5 septembre
-- [ ] Bloc lieu avec bouton "Open in Google Maps" vers les coordonnées GPS
-- [ ] Réponse de présence par message WhatsApp pré-rempli
-- [ ] Bouton de partage du lien (Web Share API avec repli copier)
-- [ ] Balises Open Graph et image de partage, pour que l'aperçu WhatsApp soit correct
+**Indispensables (v1) :**
+- [x] Écran d'accueil : prénom, 9 ans, date, heure, lieu, bouton d'action
+- [x] Compte à rebours jusqu'au 5 septembre
+- [x] Bloc lieu avec bouton "Open in Google Maps" vers les coordonnées GPS
+- [x] Bouton de partage du lien (Web Share API avec repli copier)
+- [x] Balises Open Graph et image de partage, pour que l'aperçu WhatsApp soit correct
+- [x] ~~Réponse de présence par message WhatsApp pré-rempli~~ retirée en D-024
 
-**Souhaitables si le temps le permet :**
-- [ ] Animation d'ouverture d'enveloppe
+**Souhaitables, faites :**
+- [x] Ouverture cinématique à la première visite
+- [x] Musique d'ambiance (jamais en lecture automatique)
+- [x] Gâteau interactif et jeu des neuf étincelles
+
+**Souhaitables, pas faites :**
 - [ ] Ajout au calendrier (.ics)
 - [ ] Galerie photo
-- [ ] Musique d'ambiance (jamais en lecture automatique)
 
 ---
 
 ## Informations encore manquantes
 
-1. **L'heure de début et l'heure de fin.** Bloquant pour la v1, un parent ne peut pas répondre sans.
-2. **Le nom du lieu en clair** ("chez nous", nom de la résidence, du quartier). Les coordonnées GPS seules ne suffisent pas, personne ne lit des coordonnées.
-3. **Le numéro WhatsApp** qui reçoit les réponses.
+**Aucune.** Tout le contenu est validé par Kader au 2026-08-31.
+
+- Heure de début : **14h** (D-023)
+- Heure de fin : **volontairement non annoncée** (D-023)
+- Lieu affiché : **« Abidjan » seul**, la précision est portée par le bouton Google Maps (D-026)
+- Programme : **natation et poterie** (D-025)
+- Numéro WhatsApp : **sans objet** depuis le retrait du formulaire de réponse (D-024)

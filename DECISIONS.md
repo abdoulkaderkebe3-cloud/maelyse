@@ -265,3 +265,98 @@ Même remarque pour deux lignes ajoutées au bloc d'informations : le **code ves
 **Raison :** le décor passe **derrière le texte**. Un ballon doré clair derrière une ligne de texte fait tomber le contraste autour de 2:1, très en dessous du seuil lisible. Avec des teintes sombres, la luminance moyenne reste basse et le texte garde son contraste. La phrase du hero est passée de `muted` à `silver` pour la même raison.
 
 **Les cartes de contenu ont aussi été opacifiées** (de 50% à 85%) : un ballon qui traversait le formulaire de réponse gênait la lecture et faisait négligé.
+
+---
+
+## D-021 - 2026-08-31 : `src/config.ts`, fichier de configuration unique
+
+**Décision :** `src/data/invitation.ts` est remplacé par `src/config.ts`, découpé en sections numérotées : palette, fête, lieu, jeu, son, programme, textes. Rien d'autre ne contient de valeur modifiable.
+
+**Raison :** la règle du projet était déjà « tout le contenu dans un seul fichier », mais les couleurs vivaient dans le CSS, les réglages du son et du jeu dans leurs composants. Le fichier unique va plus loin : **il rend le site réutilisable pour un autre anniversaire en ne touchant qu'un fichier**, ce qui a une valeur au-delà de cette fête.
+
+**Conséquence :** la palette est injectée en variables CSS au démarrage par `src/lib/palette.ts`, au lieu d'être figée dans le bloc `@theme` de Tailwind.
+
+---
+
+## D-022 - 2026-08-31 : Ouverture cinématique, son d'ambiance et jeu des neuf étincelles
+
+**Contexte :** cette refonte a été réalisée en fin de session précédente et n'avait **jamais été commitée ni documentée**. Elle a été retrouvée dans l'arbre de travail à la reprise du 2026-08-31 au soir.
+
+**Ce qui a changé :**
+- `Envelope.tsx` devient `Intro.tsx` : ouverture plus longue et plus construite, toujours à la première visite seulement.
+- **Son d'ambiance** (`src/lib/sound.ts`, `SoundToggle`) : boîte à musique discrète, jamais en lecture automatique, démarrée au premier geste de l'invité, coupable en un appui.
+- **Jeu des neuf étincelles** : huit sont cachées dans la page, la neuvième se gagne en soufflant les bougies. Trouver les neuf déclenche `Victory` et les feux d'artifice. L'état est partagé par `PartyContext` et retenu d'une visite à l'autre.
+
+**Raison du jeu :** le site s'adresse aux parents pour l'information, mais l'enfant qui regarde par-dessus l'épaule n'avait rien à faire après le gâteau. Neuf étincelles pour neuf ans donnent une raison de parcourir toute la page, donc de lire toutes les informations.
+
+**Piège à retenir :** un travail non commité n'existe pas. Deux heures de refonte ne tenaient qu'au disque local, sans trace dans le journal du projet.
+
+---
+
+## D-023 - 2026-08-31 : 14h, et aucune heure de fin annoncée
+
+**Décision :** la fête commence à **14h** (`2:00 PM`). Kader a choisi de **ne pas annoncer d'heure de fin**. La ligne Time affiche donc « From 2:00 PM » et non une plage.
+
+**Comment c'est codé :** `party.endTime` reste volontairement vide et `Details` gère trois cas : plage complète, heure de début seule, rien du tout. Renseigner `endTime` plus tard suffit à faire réapparaître la plage, sans toucher au composant.
+
+**Réserve exprimée :** l'heure de fin est la première question qu'un parent se pose pour s'organiser, et le CLAUDE.md du projet en faisait une information indispensable. Kader a tranché en connaissance de cause. Si un parent la demande par message, c'est une ligne à remplir.
+
+**Effet de bord corrigé :** `dateISO` passe de 15h à **14h UTC**, la Côte d'Ivoire étant sur GMT. Le compte à rebours visait une heure fausse d'une heure.
+
+---
+
+## D-024 - 2026-08-31 : Retrait du formulaire de réponse et de la ligne « For parents »
+
+**Décision de Kader :** on retire **la section de réponse de présence entière** et **la ligne « For parents »** du bloc d'informations.
+
+**Ce que ça change :**
+- `Rsvp.tsx` est supprimé, ainsi que le bloc `rsvp` de la configuration (numéro WhatsApp, nombre d'adultes) et tous les textes du formulaire.
+- Le **numéro WhatsApp n'est plus une information bloquante**. Il ne reste plus rien qui empêche d'envoyer le lien.
+- Le hero passe de deux boutons à **un seul, « See the place »**, qui descend vers le lieu. La barre fixe basse pointe au même endroit et disparaît quand le bloc du lieu est à l'écran.
+- La description Open Graph ne promet plus de répondre.
+
+**Conséquence assumée :** le site n'offre plus aucun moyen de confirmer sa venue. Les réponses se feront hors du site, dans la conversation WhatsApp où le lien est partagé. L'objectif 2 du projet (« Il répond ») tombe, l'invitation devient purement informative.
+
+**Ce qui reste malgré tout :** la natation impose une information pratique. La ligne « Dress code » devient **« What to bring »** et demande maillot, serviette et rechange. Ce n'est pas une ligne pour les parents, c'est ce qu'un enfant doit avoir dans son sac.
+
+---
+
+## D-025 - 2026-08-31 : Le programme dit enfin ce qui va se passer
+
+**Décision :** les deux activités confirmées par Kader sont **la natation** et **la poterie**. Le programme devient : accueil, natation, poterie, gâteau.
+
+**Ce qui a été retiré :** « Games » et « Photos », inventés par Claude en D-015 et jamais validés. Un programme faux est pire qu'un programme court.
+
+**Ce qui reste une proposition :** l'accueil et le gâteau, qui vont de soi pour un anniversaire de 9 ans.
+
+**Toujours sans horaires**, pour la raison déjà actée : annoncer « 16h le gâteau » et ne pas le tenir, c'est dix parents à la porte au mauvais moment.
+
+---
+
+## D-026 - 2026-08-31 : Le lieu affiché, c'est « Abidjan », rien de plus
+
+**Décision de Kader :** le lieu affiché se réduit à **« Abidjan »**. `venue.address` est vidé, la précision est portée uniquement par le bouton Google Maps, qui pointe sur les vraies coordonnées.
+
+**Ce que ça implique dans le code :** l'adresse devient facultative. `Details` affiche « nom — adresse » si l'adresse existe, le nom seul sinon ; `Location` masque la ligne d'adresse quand elle est vide. Remplir `venue.address` plus tard suffit à la faire réapparaître, sans toucher aux composants.
+
+**Réserve exprimée, et écartée par Kader :** un parent qui prend un taxi ne peut rien dire au chauffeur avec « Abidjan » seul, il devra ouvrir Maps. Kader a tranché en connaissance de cause, l'invitation part dans un groupe où les gens se connaissent.
+
+**Le champ n'est plus marqué ⚠️** dans `src/config.ts` : ce n'est plus une valeur par défaut oubliée, c'est un choix.
+
+---
+
+## D-027 - 2026-08-31 : Le gâteau et le compte à rebours, quatre défauts que seul l'œil voyait
+
+**Contexte :** Kader signale « un souci au niveau du gâteau », puis « des traits noirs » sur le compte à rebours. Aucun des quatre défauts ne produisait d'erreur, ni au build, ni en console.
+
+**1. Les bougies des extrémités flottaient à côté du gâteau.** La rangée de neuf boutons mesurait 268 px, exactement la largeur de l'étage du BAS, alors que l'étage du HAUT n'en faisait que 176. Les boutons `w-8` ne tenaient pas dans la largeur et **flex les avait rétractés** de 32 à 27 px pour remplir toute la ligne, ce qui masquait le problème dans le code : rien n'indiquait un débordement, la rangée était simplement trop large pour le glaçage. Correction : la rangée est **contrainte à 220 px** et centrée, l'étage du haut passe à 236 px, il l'englobe donc franchement.
+
+**2. Les deux étages avaient presque la même largeur.** Après le premier essai, 248 px contre 300, l'ensemble ne lisait plus comme un gâteau mais comme deux boîtes empilées. Le gâteau est élargi à 320 px et l'étage du haut ramené à 236 : **84 px d'écart**, soit 42 de chaque côté, l'étagement redevient lisible.
+
+**3. Les coulures de l'étage du bas formaient une rangée de dents sombres** suspendues au-dessus du plat, dans la même couleur que le bas du gâteau. Supprimées : le glaçage coule du haut vers le bas, un étage inférieur ne dégouline pas sur son plat.
+
+**4. Le plat ne débordait qu'à droite.** Il fait 108 % de la largeur du gâteau et était centré par `mx-auto`. **Des marges automatiques ne deviennent jamais négatives** : sur un élément plus large que son parent, `mx-auto` le laisse collé à gauche. Remplacé par `left-1/2` et `-translate-x-1/2`, débordement mesuré à 13 px de chaque côté.
+
+**5. Le compte à rebours était barré d'un trait noir.** Chaque tuile portait un filet `bg-night/70`, donc quasi noir, en travers du milieu, censé imiter la charnière d'un tableau de gare. Sur un chiffre doré en serif, ça ne se lit pas comme une charnière mais comme une barre noire qui coupe le chiffre. Retiré : la bascule du volet raconte déjà le mécanisme.
+
+**Ce qu'il faut en retenir :** une intention de dessin ne se valide pas dans le code, elle se valide à l'écran. Les cinq défauts venaient de valeurs parfaitement cohérentes prises isolément, et fausses les unes par rapport aux autres. Trois d'entre eux sont des rapports de largeur, que seule une mesure des rectangles réels a permis de constater.
