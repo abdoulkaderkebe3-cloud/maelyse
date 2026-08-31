@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-08-31 19:20
+> Dernière mise à jour : 2026-08-31 19:45
 
 ## État global
 **L'invitation est EN LIGNE : https://maelyse.vercel.app**
@@ -32,7 +32,7 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 ## À faire (priorisé)
 - [ ] **Renseigner `whatsappNumber`** (bloquant)
 - [ ] **Renseigner `startTime` et `endTime`** (bloquant)
-- [ ] **Relire le déroulé, le code vestimentaire et la mention cadeaux** (inventés par Claude, D-015)
+- [ ] **Relire le déroulé, le code vestimentaire et la mention cadeaux** (inventés par Claude, D-015, réécrits en D-016)
 - [ ] Tester sur un vrai téléphone : aperçu WhatsApp, ouverture de Maps, envoi d'une réponse réelle
 - [ ] Si besoin après test réel : alléger `motion` via LazyMotion (~113 Ko gzippés aujourd'hui)
 - [ ] Optionnel : ajout au calendrier (.ics), galerie photo
@@ -53,6 +53,7 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - D-013 enveloppe d'accueil, première visite seulement
 - D-014 passe de performance, la fluidité prime sur l'effet
 - D-015 section déroulé, contenu proposé à valider
+- D-016 retrait du vocabulaire de soirée, c'est une fête d'enfant
 
 ## Pièges rencontrés et solutions
 - **Le brief mélangeait deux produits** (vitrine et invitation) → tranché en D-004 avant tout code.
@@ -64,6 +65,7 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - **Mesurer la performance sur le serveur de développement ne veut rien dire** : 12,8 s en dev contre 5,4 s en production, pour le même code.
 - **La tuile des secondes se vidait** à chaque changement de valeur → compteur à rouleau avec l'ancien et le nouveau chiffre présents en même temps.
 - **L'enveloppe laissait voir la lettre par les côtés** → face avant et rabat construits sur la même géométrie.
+- **Repérer qu'une référence ne colle pas ne suffit pas.** J'avais signalé que « Euphoria » était un univers d'adultes et repositionné l'ambiance visuelle, mais les textes anglais avaient gardé le vocabulaire du brief (piste de danse, boisson, lunettes de soleil). Kader a dû le relever. Corriger une référence impose de la corriger partout où elle a laissé des traces, en particulier dans les mots, qui sont ce que les parents lisent.
 - **Le heredoc bash cale sur du TSX** → écriture directe de fichier pour ces cas.
 
 ## Notes importantes pour la prochaine session
