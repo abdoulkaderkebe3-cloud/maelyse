@@ -88,7 +88,7 @@ Les 4 piliers du CLAUDE.md racine s'appliquent. Spécificités :
 - **Motif en Z**, page de faible densité : le prénom en haut, la date au centre, le bouton d'action en bas et atteignable sans scroll, ou en barre fixe basse. Depuis D-024 ce bouton unique est « See the place » et descend vers le lieu.
 - **Thème sombre unique**, exception assumée au thème double du workspace. Une invitation de soirée n'a pas de mode clair.
 - **Contraste AA malgré le néon** : le violet saturé sur noir tombe autour de 3:1, il sert donc aux fonds, halos et bordures, jamais au texte courant. Le doré, le turquoise clair et le blanc portent le texte.
-- **Les animations ne bloquent jamais l'information.** L'ouverture d'enveloppe se saute au premier tap et ne se rejoue pas. `transform` et `opacity` uniquement, `prefers-reduced-motion` respecté, page lisible avec toutes les animations coupées.
+- **Les animations ne bloquent jamais l'information.** L'ouverture se rejoue à chaque chargement (D-029), donc elle doit rester interruptible : l'enveloppe attend un appui et ne part jamais seule, et une fois lancée, un appui n'importe où l'abrège (D-028). `transform` et `opacity` uniquement, `prefers-reduced-motion` respecté, page lisible avec toutes les animations coupées.
 - **Poids de la page surveillé.** L'invité est sur un téléphone d'entrée de gamme en 4G moyenne. Pas de vidéo de fond, pas de librairie d'animation lourde, images dimensionnées et compressées.
 - **Il n'y a plus de formulaire** depuis D-024. La règle des 5 états reste valable pour tout formulaire qui reviendrait.
 

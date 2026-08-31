@@ -360,3 +360,63 @@ Même remarque pour deux lignes ajoutées au bloc d'informations : le **code ves
 **5. Le compte à rebours était barré d'un trait noir.** Chaque tuile portait un filet `bg-night/70`, donc quasi noir, en travers du milieu, censé imiter la charnière d'un tableau de gare. Sur un chiffre doré en serif, ça ne se lit pas comme une charnière mais comme une barre noire qui coupe le chiffre. Retiré : la bascule du volet raconte déjà le mécanisme.
 
 **Ce qu'il faut en retenir :** une intention de dessin ne se valide pas dans le code, elle se valide à l'écran. Les cinq défauts venaient de valeurs parfaitement cohérentes prises isolément, et fausses les unes par rapport aux autres. Trois d'entre eux sont des rapports de largeur, que seule une mesure des rectangles réels a permis de constater.
+
+---
+
+## D-028 - 2026-08-31 : L'ouverture prend son temps, et devient interruptible
+
+**Demande de Kader :** « après l'enveloppe tu peux rendre l'animation plus longue ».
+
+**Ce qui n'allait pas, mesuré :** le grand « 9 » finissait d'apparaître à 2630 ms et le départ se déclenchait à 2650. **L'image assemblée existait vingt millisecondes.** Toute la mise en scène menait à un tableau que personne n'avait le temps de regarder. Le défaut n'était pas la vitesse des mouvements, c'était l'absence totale de temps de pause.
+
+**Nouveau minutage**, regroupé dans une constante `BEAT` en tête de `Intro.tsx` pour qu'on n'ait plus à chasser des `delay` dans le JSX :
+
+| Repère | Avant | Après |
+|---|---|---|
+| Le prénom commence à s'assembler | 780 ms | 780 ms |
+| Tout est assemblé et immobile | 2630 ms | 3380 ms |
+| Départ | 2650 ms | 4400 ms |
+| Page rendue | 3350 ms | 5300 ms |
+
+Le temps de pause passe donc de **20 ms à environ une seconde**. Mesure réelle au navigateur : ouverture complète en 5474 ms.
+
+**Contrepartie obligatoire, le raccourci.** Dès que la séquence est lancée, **un appui n'importe où l'abrège** (67 ms mesurés entre l'appui et la page). Un discret « Tap to skip » apparaît à 2200 ms, une fois le prénom en place : le proposer d'emblée reviendrait à s'excuser de son propre décor. Une animation plus longue n'a le droit d'exister que si on peut en sortir.
+
+**`prefers-reduced-motion` est inchangé** : pour ces visiteurs, l'appui sur l'enveloppe ouvre directement la page, sans aucune séquence.
+
+---
+
+## D-029 - 2026-08-31 : L'ouverture se rejoue à chaque chargement
+
+**Demande de Kader :** « quand on actualise le site on doit revenir à l'animation de départ ».
+
+**Ce qui change :** **D-013 est annulée.** Une clé de stockage local (`maelyse-intro-seen-v2`) retenait la première visite et les suivantes arrivaient directement sur l'invitation. Elle est supprimée, et volontairement pas remplacée : plus aucune mémoire, l'ouverture se joue à chaque chargement de la page.
+
+**L'argument de D-013 était réel** et il reste vrai : un parent qui rouvre le lien le jeudi pour revérifier l'adresse retraverse l'ouverture. Kader a tranché en connaissance de cause.
+
+**Ce qui rend le choix tenable, et qui n'existait pas quand D-013 a été prise :**
+- l'enveloppe **attend un appui**, elle ne part jamais toute seule, donc personne ne subit une animation qu'il n'a pas déclenchée ;
+- **un appui n'importe où abrège la séquence** (D-028). Un parent pressé touche deux fois l'écran et il est sur la page.
+
+**Piège évité au passage :** le clic qui ouvre l'enveloppe remontait au voile qui porte désormais le raccourci, et aurait donc déclenché « passer » dans la foulée du même geste. `stopPropagation` sur l'ouverture règle le cas.
+
+---
+
+## D-030 - 2026-08-31 : Le décor ne coûte rien, mesuré une deuxième fois
+
+**Demande de Kader :** vérifier que le décor ne fait pas ramer la page.
+
+**Première série, fausse.** Elle donnait le décor à 21 ms par image sur 83, soit un quart du coût. **L'erreur : chaque condition était mesurée à la suite, sans rechargement.** La première passe de défilement déclenche toutes les animations d'apparition de la page, les suivantes n'ont plus à les faire. Je comparais donc une passe chargée à des passes déjà réchauffées, et l'écart mesuré n'était pas celui du décor mais celui de l'ordre des mesures.
+
+**Deuxième série, protocole corrigé** : onglet focalisé et visible, une passe de chauffe systématiquement jetée, mesure sur la passe suivante, processeur bridé 4 fois, défilement continu de toute la page.
+
+| | Image médiane | Pire image | Images > 50 ms |
+|---|---|---|---|
+| Avec le décor | 28,0 ms (36 i/s) | 90,5 ms | 6 sur 150 |
+| Sans le décor | 28,4 ms (35 i/s) | 83,4 ms | 7 sur 149 |
+
+**Le décor est gratuit.** Les optimisations de D-019 ont fait leur travail : ballons pré-dessinés une fois dans un canvas hors écran puis recopiés, canvas à un pixel par point CSS, dessin plafonné à 30 images par seconde, boucle arrêtée quand l'onglet passe en arrière-plan.
+
+**Sans bridage** : 141 images par seconde médianes, pire image 27,8 ms, **aucune image au-delà de 33 ms**. Page vide de référence dans les mêmes conditions : 145 images par seconde, ce qui confirme que le plafond du navigateur n'est pas en cause.
+
+**La règle de méthode, deux fois apprise :** ne jamais comparer deux mesures de fluidité prises à la suite sur la même page. Recharger, ou au minimum jeter une passe de chauffe. Une page qui vient d'être parcourue n'est plus dans le même état que la première fois.

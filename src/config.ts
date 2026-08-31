@@ -157,6 +157,8 @@ export const copy = {
   envelopeHint: 'Tap to open',
   envelopeAria: 'Open the invitation',
   introTagline: 'is turning',
+  /** Raccourci proposé pendant l'ouverture, une fois le prénom assemblé. */
+  introSkip: 'Tap to skip',
 
   // Hero
   eyebrow: 'You are invited',

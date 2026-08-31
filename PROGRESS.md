@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-09-01 00:05
+> Dernière mise à jour : 2026-09-01 00:40
 
 ## État global
 **L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
@@ -13,7 +13,7 @@
 La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 
 ## Fait
-- [x] Structure de continuité, 27 décisions actées (D-001 à D-027)
+- [x] Structure de continuité, 29 décisions actées (D-001 à D-029)
 - [x] Vite 8 + React 19 + TypeScript strict + Tailwind v4
 - [x] **`src/config.ts`, fichier de configuration unique** (D-021) : palette, fête, lieu, jeu, son, programme, tous les textes. Il remplace `src/data/invitation.ts`
 - [x] **Ouverture cinématique** `Intro.tsx`, première visite seulement
@@ -32,6 +32,9 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - [x] **Lieu réduit à « Abidjan »** (D-026), l'adresse devient facultative dans le code et la précision est portée par le bouton Maps
 - [x] **Gâteau corrigé** (D-027) : les bougies des extrémités flottaient à côté du glaçage, les deux étages avaient presque la même largeur, les coulures du bas formaient des dents sombres, le plat ne débordait qu'à droite
 - [x] **Trait noir retiré du compte à rebours** (D-027) : un filet quasi noir barrait le milieu de chaque chiffre
+- [x] **Ouverture allongée** (D-028) : le prénom assemblé ne tenait que 20 ms à l'écran avant le départ, il tient maintenant une seconde. Séquence complète mesurée à 5474 ms contre 3350
+- [x] **Raccourci « passer »** (D-028) : un appui n'importe où abrège l'ouverture, pris en compte en 67 ms
+- [x] **L'ouverture se rejoue à chaque chargement** (D-029), la clé de stockage local est supprimée
 - [x] Meta description et Open Graph mis à jour, ils ne promettent plus de répondre
 - [x] Build vert (`npm run build`), vérifié au navigateur en 390px et 1440px, **0 erreur console, 0 débordement horizontal**
 
@@ -61,12 +64,16 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **D-025 le programme dit enfin ce qui va se passer : natation et poterie**
 - **D-026 le lieu affiché, c'est « Abidjan », rien de plus**
 - **D-027 gâteau et compte à rebours, quatre défauts que seul l'œil voyait**
+- **D-028 l'ouverture prend son temps, et devient interruptible**
+- **D-029 l'ouverture se rejoue à chaque chargement, D-013 est annulée**
 
 ## Pièges rencontrés et solutions
 - **Un travail non commité n'existe pas.** À la reprise du 2026-08-31, deux heures de refonte (config unique, son, jeu des étincelles) ont été retrouvées dans l'arbre de travail : jamais commitées, jamais documentées, et donc absentes du site en ligne alors que PROGRESS.md annonçait le contraire. Commiter est ce qui rend un travail réel.
 - **PROGRESS.md peut mentir.** Il décrivait un état antérieur de deux heures au disque. À chaque reprise, croiser le journal avec `git status` et les dates de modification, pas seulement lire le journal.
 - **Le fuseau se vérifie.** `dateISO` était à 15h UTC pour une fête à 14h à Abidjan, qui est sur GMT. Le compte à rebours se serait trompé d'une heure sans que rien ne le signale.
 - **Retirer une section, c'est retirer tout ce qui pointait dessus.** Supprimer le formulaire imposait aussi le bouton du hero, la cible de la barre fixe basse, l'observateur d'intersection, les textes, le bloc de configuration et la description Open Graph.
+- **Une animation peut être entièrement juste et ne rien donner à voir.** L'ouverture enchaînait correctement ses quatre temps, mais le tableau final n'existait que 20 ms : tout le mouvement menait à une image que personne ne voyait. Le temps de pause fait partie de l'animation, pas du vide entre deux animations.
+- **Un clic sur un enfant remonte au parent.** Le clic qui ouvre l'enveloppe atteignait le voile devenu porteur du raccourci « passer », et aurait sauté l'ouverture dans le geste même qui la lance. `stopPropagation` sur l'ouverture.
 - **`mx-auto` ne centre pas un élément plus large que son parent.** Les marges automatiques ne deviennent jamais négatives : l'élément reste collé à gauche et ne déborde qu'à droite. Il faut `left-1/2` et `-translate-x-1/2`.
 - **Flex rétracte les éléments trop larges sans rien signaler.** Les neuf bougies en `w-8` étaient silencieusement ramenées à 27 px pour remplir la ligne, ce qui masquait le vrai problème : la rangée était plus large que le glaçage sur lequel elle est censée poser.
 - **Une capture pleine page ne montre pas les animations au défilement** : les blocs révélés à l'apparition restent à opacité zéro et la page paraît vide. Injecter une règle qui force l'opacité avant de capturer, sinon on croit à tort que le rendu est cassé.

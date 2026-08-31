@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { copy, party } from '../config'
 import { useParty } from '../context/PartyContext'
@@ -9,7 +10,7 @@ import { easeOutExpo } from './Reveal'
  *  OUVERTURE DU SITE
  * ============================================================================
  *
- * Une seule séquence continue, en quatre temps, environ trois secondes après
+ * Une seule séquence continue, en quatre temps, environ cinq secondes après
  * l'appui :
  *
  *   1. sealed    l'enveloppe flotte, cachetée, entourée d'étincelles en orbite
@@ -17,11 +18,39 @@ import { easeOutExpo } from './Reveal'
  *   3. assemble  les lettres du prénom jaillissent de la lumière et s'assemblent
  *   4. leave     tout s'écarte, on entre dans la fête
  *
- * Règle non négociable : cette séquence ne se joue qu'à la PREMIÈRE visite
- * (voir App). Un parent qui rouvre le lien le jeudi pour revérifier l'adresse
- * tombe directement sur l'invitation. C'est magique une fois, agaçant la
- * quatrième.
+ * Le temps de pause compte autant que le mouvement. Dans une première version,
+ * le grand « 9 » finissait d'apparaître à 2630 ms et le départ se déclenchait à
+ * 2650 : l'image assemblée n'existait que vingt millisecondes, on n'avait pas le
+ * temps de la regarder. Les repères ci-dessous ménagent une seconde entière de
+ * calme, tout assemblé, avant que la page ne s'ouvre.
+ *
+ * Cette séquence se joue à CHAQUE chargement de la page (choix de Kader, voir
+ * D-029). Elle ne se joue donc plus qu'une fois par visiteur, et c'est ce qui
+ * rend les deux garde-fous ci-dessous obligatoires plutôt que confortables :
+ *
+ *   - l'enveloppe attend un appui, elle ne part jamais toute seule ;
+ *   - dès que l'ouverture est lancée, un appui n'importe où l'abrège.
+ *
+ * Une animation plus longue et rejouée n'a le droit d'exister que si on peut en
+ * sortir. Un parent pressé de revérifier l'adresse touche deux fois l'écran et
+ * il est sur la page.
  */
+
+/**
+ * Repères de la séquence, en millisecondes après l'appui sur l'enveloppe.
+ * Ils sont ici et nulle part ailleurs : allonger l'ouverture doit se faire en
+ * touchant ces quatre nombres, pas en cherchant des `delay` dans le JSX.
+ */
+const BEAT = {
+  /** Le prénom commence à s'assembler. Fin de l'ouverture de l'enveloppe. */
+  assemble: 780,
+  /** Tout est assemblé et immobile depuis une seconde : on part. */
+  leave: 4400,
+  /** L'ouverture est retirée et la page prend la main. */
+  done: 5300,
+  /** Le raccourci « passer » apparaît, discrètement, une fois le prénom là. */
+  skipHint: 2200,
+} as const
 
 type Phase = 'arriving' | 'sealed' | 'burst' | 'assemble' | 'leave'
 
@@ -55,6 +84,8 @@ export function Intro({ onDone }: { onDone: () => void }) {
   const reduced = useReducedMotion()
   const { startAudio, playSound } = useParty()
   const [phase, setPhase] = useState<Phase>('arriving')
+  /** Le raccourci existe dès le premier instant, il ne s'AFFICHE qu'ensuite. */
+  const [canSkip, setCanSkip] = useState(false)
 
   const letters = useMemo(() => party.firstName.split(''), [])
   const origins = useLetterOrigins(letters.length)
@@ -90,8 +121,12 @@ export function Intro({ onDone }: { onDone: () => void }) {
     return () => window.clearTimeout(timer)
   }, [reduced])
 
-  function open() {
+  function open(event: MouseEvent) {
     if (phase !== 'sealed') return
+
+    // Sans ça, ce même clic remonterait au voile et déclencherait aussitôt le
+    // raccourci « passer » posé dessus.
+    event.stopPropagation()
 
     // Le son démarre ici, sur un vrai geste, jamais tout seul.
     startAudio()
@@ -107,10 +142,18 @@ export function Intro({ onDone }: { onDone: () => void }) {
       window.setTimeout(() => {
         setPhase('assemble')
         playSound('chime')
-      }, 780),
-      window.setTimeout(() => setPhase('leave'), 2650),
-      window.setTimeout(onDone, 3350),
+      }, BEAT.assemble),
+      window.setTimeout(() => setPhase('leave'), BEAT.leave),
+      window.setTimeout(onDone, BEAT.done),
+      window.setTimeout(() => setCanSkip(true), BEAT.skipHint),
     )
+  }
+
+  /** Abrège l'ouverture. Disponible dès que la séquence est lancée. */
+  function skip() {
+    if (phase === 'arriving' || phase === 'sealed') return
+    timersRef.current.forEach((id) => window.clearTimeout(id))
+    onDone()
   }
 
   const opening = phase === 'burst' || phase === 'assemble' || phase === 'leave'
@@ -118,10 +161,11 @@ export function Intro({ onDone }: { onDone: () => void }) {
 
   return (
     <motion.div
+      onClick={skip}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden px-6"
       initial={{ opacity: 1 }}
       animate={{ opacity: phase === 'leave' ? 0 : 1 }}
-      transition={{ duration: 0.55, delay: phase === 'leave' ? 0.3 : 0, ease: 'easeIn' }}
+      transition={{ duration: 0.6, delay: phase === 'leave' ? 0.3 : 0, ease: 'easeIn' }}
     >
       {/* Voile léger : le ciel et les ballons restent visibles derrière */}
       <div className="absolute inset-0 -z-10 bg-night/45" />
@@ -287,7 +331,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
           <motion.div
             key="name"
             className="relative flex flex-col items-center"
-            exit={{ scale: 1.35, opacity: 0, transition: { duration: 0.6, ease: 'easeIn' } }}
+            exit={{ scale: 1.35, opacity: 0, transition: { duration: 0.75, ease: 'easeIn' } }}
           >
             <div className="flex items-baseline justify-center">
               {letters.map((letter, index) => (
@@ -304,8 +348,8 @@ export function Intro({ onDone }: { onDone: () => void }) {
                   }}
                   animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1, filter: 'blur(0px)' }}
                   transition={{
-                    duration: 1.05,
-                    delay: index * 0.075,
+                    duration: 1.25,
+                    delay: index * 0.1,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                 >
@@ -318,7 +362,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
               className="mt-5 font-body text-sm uppercase tracking-[0.34em] text-aqua"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.95, duration: 0.6, ease: easeOutExpo }}
+              transition={{ delay: 1.3, duration: 0.7, ease: easeOutExpo }}
             >
               {copy.introTagline}
             </motion.p>
@@ -328,11 +372,32 @@ export function Intro({ onDone }: { onDone: () => void }) {
               data-shine=""
               initial={{ opacity: 0, scale: 0.4 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.1, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 1.7, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
               {party.age}
             </motion.p>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/*
+        Raccourci « passer ». Il n'apparaît qu'une fois le prénom en place :
+        le proposer d'emblée reviendrait à s'excuser de son propre décor.
+        La zone touchable, elle, est l'écran entier, depuis le premier instant.
+      */}
+      <AnimatePresence>
+        {canSkip && phase !== 'leave' && (
+          <motion.p
+            key="skip"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-10 text-center font-body text-xs uppercase tracking-[0.28em] text-muted/70"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            {copy.introSkip}
+          </motion.p>
         )}
       </AnimatePresence>
 

@@ -22,21 +22,20 @@ import { SoundToggle } from './components/SoundToggle'
 import { Spark } from './components/Spark'
 import { Victory } from './components/Victory'
 
-const INTRO_KEY = 'maelyse-intro-seen-v2'
-
-/** L'ouverture ne se joue qu'à la première visite (voir Intro). */
-function hasSeenIntro() {
-  try {
-    return window.localStorage.getItem(INTRO_KEY) === '1'
-  } catch {
-    // Stockage bloqué : on montre l'ouverture, c'est le comportement le plus joli.
-    return false
-  }
-}
-
+/**
+ * L'ouverture se rejoue à CHAQUE chargement de la page.
+ *
+ * Elle ne le faisait pas : une clé de stockage local retenait la première
+ * visite et les suivantes arrivaient directement sur l'invitation. Kader a
+ * demandé l'inverse (D-029), donc plus de mémoire du tout, et volontairement
+ * pas de clé laissée à traîner.
+ *
+ * Ce qui rend le choix tenable : l'enveloppe attend un appui et ne part jamais
+ * toute seule, et une fois lancée, un appui n'importe où abrège la séquence.
+ */
 function Invitation() {
   const { startAudio } = useParty()
-  const [introDone, setIntroDone] = useState(hasSeenIntro)
+  const [introDone, setIntroDone] = useState(false)
 
   // L'invitation commence toujours en haut, quelle que soit la position de
   // défilement que le navigateur voudrait restaurer.
@@ -44,17 +43,11 @@ function Invitation() {
     if (!introDone) window.scrollTo(0, 0)
   }, [introDone])
 
-  const finishIntro = useCallback(() => {
-    try {
-      window.localStorage.setItem(INTRO_KEY, '1')
-    } catch {
-      // Sans effet : l'ouverture se rejouera à la prochaine visite.
-    }
-    setIntroDone(true)
-  }, [])
+  const finishIntro = useCallback(() => setIntroDone(true), [])
 
-  // Les visiteurs de retour n'ont pas d'ouverture, donc pas de geste pour
-  // démarrer le son. Le premier appui sur la page s'en charge, une seule fois.
+  // Filet de sécurité pour le son : l'ouverture démarre l'audio sur l'appui de
+  // l'enveloppe, mais si elle est court-circuitée d'une manière ou d'une autre,
+  // le premier appui sur la page s'en charge, une seule fois.
   useEffect(() => {
     if (!introDone) return
     function onFirstGesture() {
