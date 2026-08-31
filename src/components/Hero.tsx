@@ -39,7 +39,7 @@ export function Hero() {
   return (
     <header
       ref={ref}
-      className="relative flex min-h-[100svh] flex-col items-center px-5 pb-10 pt-4 text-center"
+      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden px-5 pb-10 pt-4 text-center"
     >
       <motion.div
         variants={container}
@@ -119,7 +119,7 @@ export function Hero() {
           </a>
           <a
             href="#location"
-            className="flex min-h-[52px] items-center justify-center rounded-full border border-line bg-surface/60 px-8 font-body text-base font-medium text-ink backdrop-blur transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
+            className="flex min-h-[52px] items-center justify-center rounded-full border border-line bg-surface/60 px-8 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
           >
             {copy.heroSecondary}
           </a>

@@ -40,7 +40,7 @@ export function ShareBar() {
       <button
         type="button"
         onClick={handleShare}
-        className="mx-auto mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/60 px-6 font-body text-base font-medium text-ink backdrop-blur transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
+        className="mx-auto mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/60 px-6 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
       >
         <svg
           aria-hidden="true"

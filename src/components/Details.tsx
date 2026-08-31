@@ -29,11 +29,13 @@ export function Details() {
       : invitation.startTime ?? copy.timeUnknown
 
   return (
-    <Stagger className="rounded-card border border-line bg-surface/50 px-5 py-2 backdrop-blur sm:px-8">
+    <Stagger className="rounded-card border border-line bg-surface/50 px-5 py-2 sm:px-8">
       <Row label={copy.whenLabel} value={`${invitation.dayLabel}, ${invitation.dateLabel}`} />
       <Row label={copy.timeLabel} value={time} muted={!invitation.startTime} />
       <Row label={copy.whereLabel} value={copy.whereValue} />
+      <Row label={copy.dressCodeLabel} value={copy.dressCodeValue} />
       <Row label={copy.parentsLabel} value={copy.parentsValue} />
+      <Row label={copy.giftLabel} value={copy.giftValue} />
     </Stagger>
   )
 }

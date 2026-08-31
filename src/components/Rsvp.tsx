@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import confetti from 'canvas-confetti'
 import { invitation } from '../data/invitation'
 
 const { copy } = invitation
@@ -9,7 +8,13 @@ const STORAGE_KEY = 'maelyse-rsvp-v1'
 
 type Status = 'idle' | 'sending' | 'sent' | 'already' | 'error'
 
-function celebrate() {
+/**
+ * Les confettis sont chargés à la demande, jamais au premier affichage.
+ * Ils ne servent qu au moment du oui, et n ont rien à faire dans le poids de la page
+ * que l invité télécharge en arrivant.
+ */
+async function celebrate() {
+  const { default: confetti } = await import('canvas-confetti')
   confetti({
     particleCount: 90,
     spread: 70,
@@ -73,7 +78,7 @@ export function Rsvp() {
     }
 
     window.open(url, '_blank', 'noopener,noreferrer')
-    if (attending) celebrate()
+    if (attending) void celebrate()
     window.setTimeout(() => setStatus('sent'), 400)
   }
 
@@ -89,7 +94,7 @@ export function Rsvp() {
   const showForm = status === 'idle' || status === 'sending' || status === 'error'
 
   return (
-    <div className="rounded-card border border-line bg-surface/50 p-5 backdrop-blur sm:p-8">
+    <div className="rounded-card border border-line bg-surface/50 p-5 sm:p-8">
       <AnimatePresence mode="wait">
         {!showForm && (
           <motion.div

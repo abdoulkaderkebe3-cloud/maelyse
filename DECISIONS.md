@@ -136,3 +136,51 @@ Anglais simple et chaleureux, pas de tournures compliquées : à Abidjan, une pa
 **Méthode à garder :** après chaque mise en ligne, contrôler le code HTTP **depuis l'extérieur d'une session connectée**. Un 200 obtenu dans un navigateur où l'on est authentifié ne prouve rien.
 
 **Note :** le dépôt GitHub a été rattaché automatiquement au projet Vercel pendant le premier déploiement. Un `git push` sur `main` redéploie donc le site, contrairement à `artluxury` où la liaison n'avait jamais été faite.
+
+---
+
+## D-013 - 2026-08-31 : Enveloppe d'accueil, montrée à la première visite seulement
+
+**Décision :** l'invitation s'ouvre sur une enveloppe fermée, cachetée d'un sceau de cire doré marqué « M ». Un appui fait basculer le rabat vers l'arrière, la lettre sort, puis l'écran s'efface sur l'invitation. Environ 1,7 seconde en tout.
+
+**L'enveloppe n'apparaît qu'à la toute première visite.** Un indicateur en stockage local (`maelyse-envelope-opened-v1`) fait que les visites suivantes tombent directement sur l'invitation.
+
+**Raison de cette restriction :** demandée par Kader pour l'effet, elle reste soumise à la règle de D-003, l'animation ne retarde jamais l'information. Un parent qui rouvre le lien le jeudi pour revérifier l'adresse ne doit pas retraverser une animation. Le geste est magique la première fois, agaçant la quatrième.
+
+**Piège de construction rencontré :** la première version laissait apparaître la lettre blanche de part et d'autre du rabat. Le rabat était un triangle de 62% de hauteur tandis que la face avant remontait en V jusqu'à 72%, laissant une bande non couverte des deux côtés. Corrigé en faisant coïncider exactement les deux géométries : la face avant est le rectangle **moins** l'encoche triangulaire, pointe à 55%, et le rabat est cette encoche.
+
+---
+
+## D-014 - 2026-08-31 : Passe de performance, la fluidité prime sur l'effet
+
+**Contexte :** exigence explicite de Kader, le site ne doit jamais ramer, les invités sont des enfants et des parents sur des téléphones ordinaires. Mesures faites au navigateur avec **processeur ralenti 6x et réseau 4G lente**, sur le build de production et non le serveur de développement (le mesurer en développement donnait 12,8 s, chiffre sans aucun rapport avec la réalité).
+
+**Cinq changements, du plus au moins efficace :**
+
+1. **La feuille de style ne bloque plus le premier affichage.** Un `<link rel="stylesheet">` classique empêche le navigateur de peindre quoi que ce soit tant qu'il n'a pas la feuille. Un greffon Vite maison (`nonBlockingCss` dans `vite.config.ts`) la déclare en média `print` puis la rebascule sur `all` au chargement, avec repli `<noscript>`. **Le diagnostic « requêtes bloquant le rendu » a disparu de la trace.**
+
+2. **L'enveloppe est dessinée par le HTML lui-même**, en style intégré, avant tout JavaScript. Sans ça, l'invité regardait un écran noir pendant toute la durée de téléchargement et d'exécution du script. React remplace ce contenu au montage. Aucun texte « Tap to open » dans cette version statique : tant que le script n'est pas là, l'appui ne ferait rien, et un bouton qui ne répond pas est pire qu'un bouton absent. Un décalage de 26 px au montage a été compensé à la main dans le CSS d'amorce.
+
+3. **Polices auto-hébergées** via `@fontsource-variable`. Deux origines externes supprimées (`fonts.googleapis.com` et `fonts.gstatic.com`), donc deux résolutions DNS et deux poignées de main TLS en moins sur une connexion lente. Les `unicode-range` du paquet font que seul le sous-ensemble latin est téléchargé, soit 48 Ko pour Inter et 38 Ko pour Playfair. L'italique de Playfair a été abandonné : 37 Ko pour une seule ligne de pied de page.
+
+4. **Les halos néon ne sont plus animés.** Animer la taille d'un élément flouté oblige le navigateur à recalculer un flou de 70 à 110 px à chaque image, ce qui était de loin le calcul le plus lourd de la page. Ils sont désormais peints une fois.
+
+5. **Le champ d'étoiles passe de 70 éléments du DOM à 3.** Chaque couche est un seul div dont le fond est une liste de dégradés radiaux, et seule son opacité est animée. Les positions sont tirées par un générateur déterministe pour que le ciel soit stable d'un rendu à l'autre.
+
+**Deux autres retraits :** tous les `backdrop-filter` (8 occurrences), très coûteux sur mobile au défilement, remplacés par des fonds semi-transparents simples ; et les confettis passés en import dynamique, donc chargés au moment du « oui » et non au premier affichage.
+
+**Résultat mesuré, à 6x et 4G lente :** LCP de **6055 ms à environ 5,4 s**, décalage cumulé de mise en page **à 0,00**, plus aucune requête bloquant le rendu. Le gain réel n'est pas dans le LCP mais dans le premier affichage, que cette mesure ne capte pas : l'enveloppe apparaît maintenant presque immédiatement au lieu d'un écran noir.
+
+**Ce qui reste et qui n'a pas été fait :** le paquet JavaScript pèse 113 Ko gzippés, dont environ un tiers pour `motion`. Le réduire demanderait de passer à `LazyMotion` et de remplacer chaque `motion.div` par un `m.div`, ce qui est mécanique mais risqué à cinq jours de la fête. C'est le premier levier si le besoin se confirme sur un téléphone réel.
+
+---
+
+## D-015 - 2026-08-31 : Section « How the day goes », contenu à valider
+
+**Décision :** une section de déroulé en quatre moments (accueil, piste de danse, gâteau, jeux et photos), **sans aucun horaire**.
+
+**Raison de l'absence d'horaires :** annoncer « 16h le gâteau » et ne pas le tenir, c'est dix parents à la porte au mauvais moment. Le déroulé donne l'ambiance, pas un planning.
+
+⚠️ **Ces quatre moments sont une proposition écrite par Claude, pas une information confirmée par Kader.** Ils sont plausibles pour un anniversaire de 9 ans mais restent inventés. Ils vivent dans `invitation.plan` et doivent être relus, corrigés ou supprimés avant l'envoi du lien. Vider le tableau retire la section proprement.
+
+Même remarque pour deux lignes ajoutées au bloc d'informations : le **code vestimentaire** (« tout ce qui brille ») et la **mention sur les cadeaux** (« votre enfant qui vient, c'est déjà le principal »). Utiles aux parents, qui posent toujours ces deux questions, mais à valider.

@@ -44,8 +44,25 @@ export const invitation = {
    */
   whatsappNumber: '',
 
+  /**
+   * Programme de la fête.
+   *
+   * ⚠️ À RELIRE : ces quatre moments sont une proposition, pas une information
+   * confirmée. Ils sont volontairement sans horaire pour ne rien promettre de faux.
+   * Adapte-les à ce qui est réellement prévu, ou vide le tableau pour retirer la section.
+   */
+  plan: [
+    { title: 'Welcome', text: 'Say hello, grab a drink and pick your best pair of sunglasses.' },
+    { title: 'Dance floor', text: 'The disco ball goes on and the music does the rest.' },
+    { title: 'Cake and candles', text: 'Nine candles, one wish, and a very loud happy birthday.' },
+    { title: 'Games and photos', text: 'Silly games, a photo corner, and prizes to take home.' },
+  ],
+
   /** Textes anglais. Ils s'adressent aux parents, le visuel s'adresse à l'enfant. */
   copy: {
+    envelopeHint: 'Tap to open',
+    envelopeAria: 'Open the invitation',
+
     eyebrow: 'You are invited',
     turns: 'turns',
     tagline: 'Nine years of joy, and a dance floor waiting for you.',
@@ -65,6 +82,12 @@ export const invitation = {
     parentsLabel: 'For parents',
     parentsValue:
       'Parents are welcome to stay, and just as welcome to drop off and come back. Whatever suits you best.',
+
+    planTitle: 'How the day goes',
+    dressCodeLabel: 'Dress code',
+    dressCodeValue: 'Anything that shines. Sequins, colours, sunglasses, all welcome.',
+    giftLabel: 'Gifts',
+    giftValue: 'Your child coming is already the best part. No pressure on presents.',
 
     locationTitle: 'Find us',
     locationHint: 'Tap the map to open it in Google Maps',

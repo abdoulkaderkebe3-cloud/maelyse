@@ -11,7 +11,7 @@ function Tile({ value, label }: { value: number; label: string }) {
   return (
     <motion.div
       variants={reduced ? undefined : staggerItem}
-      className="relative flex flex-1 flex-col items-center overflow-hidden rounded-2xl border border-line bg-surface/60 px-2 py-4 backdrop-blur sm:py-6"
+      className="relative flex flex-1 flex-col items-center overflow-hidden rounded-2xl border border-line bg-surface/60 px-2 py-4 sm:py-6"
     >
       {/* Lueur qui balaie la tuile, comme un projecteur qui passe. */}
       {!reduced && (

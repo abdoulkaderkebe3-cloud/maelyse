@@ -23,15 +23,89 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!--
+      Premier affichage, peint par le HTML seul.
+
+      Sans ce bloc, l'invité regarde un écran noir pendant tout le temps de
+      téléchargement et d'exécution du JavaScript, ce qui fait plusieurs secondes
+      sur un téléphone modeste en 4G moyenne. Ici l'enveloppe est dessinée
+      immédiatement, avec les mêmes formes et les mêmes couleurs que la vraie.
+      React remplace ce contenu au montage, sans que rien ne saute à l'écran.
+
+      Volontairement AUCUN texte « Tap to open » : tant que le JavaScript n'est pas
+      là, toucher l'enveloppe ne ferait rien, et un bouton qui ne répond pas est pire
+      qu'un bouton qui n'existe pas encore.
+    -->
+    <style>
+      html { background: #06030f; }
+      body { margin: 0; background: #06030f; }
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(120% 80% at 50% 0%, #1b0b3a 0%, #0d0620 45%, #06030f 100%);
+      }
+      #boot .env {
+        position: relative;
+        width: 280px;
+        height: 186px;
+        /* Compense la place que prendra le texte « Tap to open » sous l'enveloppe
+           une fois React monté, sinon l'enveloppe saute de 26 px à ce moment-là. */
+        margin-bottom: 52px;
+        filter: drop-shadow(0 25px 60px rgba(139, 92, 246, 0.35));
+      }
+      #boot .back {
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        background: linear-gradient(to bottom, #2a0f4d, #1a0930);
+      }
+      #boot .front {
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        background: linear-gradient(to bottom right, #3b1566, #2a0f4d 50%, #1a0930);
+        clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+      }
+      #boot .flap {
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 55%;
+        border-radius: 8px 8px 0 0;
+        background: linear-gradient(to bottom, #4a1b7d, #33125c);
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        filter: drop-shadow(0 1.5px 0 rgba(255, 215, 110, 0.5));
+      }
+      #boot .seal {
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        width: 48px;
+        height: 48px;
+        margin: -24px 0 0 -24px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 30%, #ffe9a8 0%, #ffd76e 35%, #d99b1f 75%, #8a5a08 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 -2px 6px rgba(0, 0, 0, 0.35);
+      }
+      @media (min-width: 640px) {
+        #boot .env { width: 340px; height: 226px; }
+        #boot .seal { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="boot" aria-hidden="true">
+        <div class="env">
+          <div class="back"></div>
+          <div class="front"></div>
+          <div class="flap"></div>
+          <div class="seal"></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

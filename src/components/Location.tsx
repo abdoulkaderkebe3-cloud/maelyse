@@ -27,7 +27,7 @@ export function Location() {
           aria-label={copy.openMaps}
           className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-night/80 via-transparent to-transparent p-4 transition-colors duration-200 hover:from-night/60"
         >
-          <span className="rounded-full border border-aqua/40 bg-night/80 px-4 py-2 font-body text-xs text-aqua backdrop-blur">
+          <span className="rounded-full border border-aqua/40 bg-night/80 px-4 py-2 font-body text-xs text-aqua">
             {copy.locationHint}
           </span>
         </a>
@@ -37,7 +37,7 @@ export function Location() {
         href={mapsLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/60 px-6 font-body text-base font-medium text-ink backdrop-blur transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
+        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/60 px-6 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
       >
         <svg
           aria-hidden="true"
