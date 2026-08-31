@@ -82,3 +82,41 @@
 **Point de méthode qui découle du destinataire réel :** l'invitée a 9 ans, mais le lien est ouvert par **les parents de ses camarades**, qui lisent, décident et répondent. Les textes anglais leur parlent (horaires précis, adresse, faut-il rester ou déposer), pendant que le visuel parle à l'enfant. Le formulaire demande le **nom de l'enfant**, pas celui de l'adulte qui remplit.
 
 Anglais simple et chaleureux, pas de tournures compliquées : à Abidjan, une partie des parents lira une langue qui n'est pas la leur au quotidien.
+
+---
+
+## D-008 - 2026-08-31 : Bibliothèque d'animation - **motion (ex framer-motion)**
+
+**Décision :** `motion` v13 pour toutes les animations, plus `canvas-confetti` sur la confirmation de présence.
+
+**Raison :** demandé par Kader, qui veut un vrai rendu et non des transitions CSS minimales. `motion` est retenu contre GSAP parce qu'il est déclaratif en React (`whileInView`, `AnimatePresence` pour les 5 états du formulaire) et qu'il expose `useReducedMotion`, ce qui rend la règle d'accessibilité applicable sans code parallèle.
+
+**Coût assumé :** le bundle passe à **110 Ko gzippés**. C'est lourd pour une page unique lue en 4G moyenne. Accepté parce que la qualité du rendu est une demande explicite, mais c'est le premier poste à réduire si la page rame sur un téléphone réel. Aucune image lourde ne vient s'y ajouter, tout le décor est en CSS.
+
+---
+
+## D-009 - 2026-08-31 : Dépôt et déploiement
+
+**Décision :** dépôt `github.com/abdoulkaderkebe3-cloud/maelyse`, déploiement Vercel.
+
+**Note :** commit d'ouverture sans aucun trailer de co-auteur, conformément à la règle du workspace.
+
+---
+
+## D-010 - 2026-08-31 : Page non indexable et non traduite
+
+**Décision :** `<meta name="robots" content="noindex, nofollow">` et blocage de la traduction automatique (`translate="no"` plus `<meta name="google" content="notranslate">`).
+
+**Raison du noindex :** la page porte le **nom complet d'une enfant de 9 ans, la date exacte où elle sera quelque part, et la position GPS d'un domicile**. Le lien doit circuler entre parents invités, pas être trouvable dans un moteur de recherche. Le noindex ne gêne en rien le partage par lien ou par WhatsApp.
+
+**Raison du notranslate, trouvée en réel :** la première image d'aperçu générée est sortie **entièrement en français** (« VOUS ÊTES INVITÉ », « TOURS », « Samedi 5 septembre »). Le HTML était bien en anglais : c'est Chrome qui avait traduit la page à la volée, le navigateur étant configuré en français. Le défaut est invisible tant qu'on ne regarde pas le rendu réel, et il aurait touché tous les parents dont le téléphone est en français, c'est-à-dire la majorité à Abidjan. Le site est en anglais par décision de Kader, il doit donc le rester à l'écran.
+
+---
+
+## D-011 - 2026-08-31 : Carte assombrie par filtre CSS
+
+**Décision :** la carte Google Maps intégrée est assombrie côté navigateur par `filter: invert(0.92) hue-rotate(180deg) brightness(0.95) contrast(0.88) saturate(0.7)`.
+
+**Raison :** l'intégration sans clé API ne permet aucun style personnalisé, et une carte blanche au milieu d'une page noire est le seul élément qui cassait la direction artistique. Le filtre la ramène dans le thème sans coût réseau.
+
+**Limite acceptée :** l'attribution « Map data ©2026 Google » reste visible, comme l'exigent les conditions d'utilisation. Elle n'est jamais masquée par le dégradé qui recouvre la carte.
