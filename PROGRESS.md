@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-08-31 19:45
+> Dernière mise à jour : 2026-08-31 21:10
 
 ## État global
 **L'invitation est EN LIGNE : https://maelyse.vercel.app**
@@ -17,7 +17,11 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - [x] Vite 8 + React 19 + TypeScript strict + Tailwind v4
 - [x] Tout le contenu centralisé dans `src/data/invitation.ts`
 - [x] 7 sections : enveloppe, hero, compte à rebours, informations, déroulé, lieu, réponse, partage
-- [x] **Enveloppe d'accueil** cachetée, rabat qui bascule, lettre qui sort, première visite seulement (D-013)
+- [x] **Ouverture cinématique** (D-017) : l'enveloppe arrive de loin en tournant, étincelles en orbite, onde de choc, la lettre sort puis grandit jusqu'à remplir l'écran
+- [x] **Ciel vivant** : étoiles et ballons qui montent, dans un seul canvas
+- [x] **Gâteau interactif à 9 bougies** à souffler une par une, fumée, confettis
+- [x] Bandeau défilant, nom et titres révélés lettre par lettre, reflet mobile sur le 9
+- [x] **Le décor était invisible depuis le premier jour** (D-018), corrigé : le fond opaque du `body` recouvrait tout le z-index négatif
 - [x] **Animations au défilement** : parallaxe du hero, titres révélés mot par mot, cascades, compteur à rouleau, filet de progression
 - [x] **Passe de performance mesurée** à 6x processeur et 4G lente (D-014)
 - [x] Carte cliquable qui ouvre Google Maps, assombrie par filtre CSS
@@ -54,6 +58,11 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - D-014 passe de performance, la fluidité prime sur l'effet
 - D-015 section déroulé, contenu proposé à valider
 - D-016 retrait du vocabulaire de soirée, c'est une fête d'enfant
+- D-017 refonte visuelle, ouverture cinématique, gâteau interactif
+- D-018 LE défaut de fond : le body opaque recouvrait tout le décor
+- D-019 mesures de fluidité, et une erreur de méthode corrigée
+- D-020 ballons volontairement sombres, à cause du contraste du texte
+- D-016 retrait du vocabulaire de soirée, c'est une fête d'enfant
 
 ## Pièges rencontrés et solutions
 - **Le brief mélangeait deux produits** (vitrine et invitation) → tranché en D-004 avant tout code.
@@ -66,6 +75,9 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**.
 - **La tuile des secondes se vidait** à chaque changement de valeur → compteur à rouleau avec l'ancien et le nouveau chiffre présents en même temps.
 - **L'enveloppe laissait voir la lettre par les côtés** → face avant et rabat construits sur la même géométrie.
 - **Repérer qu'une référence ne colle pas ne suffit pas.** J'avais signalé que « Euphoria » était un univers d'adultes et repositionné l'ambiance visuelle, mais les textes anglais avaient gardé le vocabulaire du brief (piste de danse, boisson, lunettes de soleil). Kader a dû le relever. Corriger une référence impose de la corriger partout où elle a laissé des traces, en particulier dans les mots, qui sont ce que les parents lisent.
+- **Un décor peut être parfaitement dessiné et totalement invisible.** Le fond opaque du `body` se peignait par-dessus tout le z-index négatif. Aucune erreur au build, aucune en console, les éléments existent avec les bonnes dimensions. Ça ne se voit qu'en regardant l'écran.
+- **Une mesure de fluidité faite dans un onglet en arrière-plan ne vaut rien.** J'ai accusé la carte Google intégrée sur cette base et je l'ai retirée. Vérification refaite onglet au premier plan : elle ne coûtait rien. Toujours vérifier le focus, et toujours mesurer une page vide en référence.
+- **Les animations infinies tournent hors écran.** La page en portait une trentaine en permanence, dont 18 pour les flammes des bougies, qui brûlaient pendant qu'on lisait l'adresse deux écrans plus bas.
 - **Le heredoc bash cale sur du TSX** → écriture directe de fichier pour ces cas.
 
 ## Notes importantes pour la prochaine session
