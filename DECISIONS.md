@@ -120,3 +120,19 @@ Anglais simple et chaleureux, pas de tournures compliquées : à Abidjan, une pa
 **Raison :** l'intégration sans clé API ne permet aucun style personnalisé, et une carte blanche au milieu d'une page noire est le seul élément qui cassait la direction artistique. Le filtre la ramène dans le thème sans coût réseau.
 
 **Limite acceptée :** l'attribution « Map data ©2026 Google » reste visible, comme l'exigent les conditions d'utilisation. Elle n'est jamais masquée par le dégradé qui recouvre la carte.
+
+---
+
+## D-012 - 2026-08-31 : URL publique - `maelyse.vercel.app`, et le piège de la protection Vercel
+
+**Décision :** le lien partagé aux parents est **https://maelyse.vercel.app**.
+
+**Raison :** cette URL est lue par chaque parent invité avant même d'ouvrir la page. `anniv-6bwhsvcp3-abdoulkaderkebe3-clouds-projects.vercel.app` a l'air d'une erreur système, `maelyse.vercel.app` a l'air d'une invitation.
+
+**Piège rencontré, à retenir pour tous les projets Vercel :** l'alias créé avec `vercel alias set` **répondait 302 vers l'écran de connexion Vercel**. La protection de déploiement du compte couvre les URL de déploiement et les alias posés à la main, mais pas le domaine de production généré automatiquement par le projet. Concrètement, le lien s'ouvrait normalement pour Kader, déjà connecté à Vercel, et affichait une page de connexion à tous les autres. **C'est le défaut le plus dangereux de la journée** : invisible pour celui qui déploie, bloquant pour tout le monde d'autre, et il ne se serait vu qu'au moment où un parent aurait répondu « ton lien me demande un mot de passe ».
+
+**Correctif :** rattacher le domaine au projet avec `vercel domains add maelyse.vercel.app anniv` au lieu de `vercel alias set`. Vérifié ensuite en HTTP : 200 sur la page et sur l'image d'aperçu.
+
+**Méthode à garder :** après chaque mise en ligne, contrôler le code HTTP **depuis l'extérieur d'une session connectée**. Un 200 obtenu dans un navigateur où l'on est authentifié ne prouve rien.
+
+**Note :** le dépôt GitHub a été rattaché automatiquement au projet Vercel pendant le premier déploiement. Un `git push` sur `main` redéploie donc le site, contrairement à `artluxury` où la liaison n'avait jamais été faite.

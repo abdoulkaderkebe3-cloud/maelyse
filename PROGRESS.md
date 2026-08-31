@@ -1,15 +1,15 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-08-31 18:30
+> Dernière mise à jour : 2026-08-31 18:35
 
 ## État global
-**L'invitation est codée, buildée, vérifiée au navigateur et poussée sur GitHub.** Déploiement Vercel en cours.
+**L'invitation est EN LIGNE : https://maelyse.vercel.app**, vérifiée au navigateur en 390px et en 1440px, 0 erreur console.
 La fête est le **samedi 5 septembre 2026**, il reste **5 jours**. Le site doit être partageable avant le vendredi 4.
 
 ⚠️ **Le lien ne peut pas encore être envoyé aux invités** : sans numéro WhatsApp, le bouton de réponse ne fait rien, et l'heure de la fête n'est pas affichée.
 
 ## Fait
 - [x] Structure de continuité (CLAUDE.md, PROGRESS.md, DECISIONS.md, NEXT_SESSION.md)
-- [x] 11 décisions actées, D-001 à D-011
+- [x] 12 décisions actées, D-001 à D-012
 - [x] Projet initialisé à la main : Vite 8, React 19, TypeScript strict, Tailwind v4
 - [x] Tokens de la palette néon posés en thème sombre unique dans le `@theme`
 - [x] `src/data/invitation.ts` : tout le contenu et tous les textes anglais centralisés
@@ -25,15 +25,16 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**. Le site doit 
 - [x] Page en noindex, traduction automatique du navigateur bloquée
 - [x] Build vert, `tsc` propre, 110 Ko de JS gzippé
 - [x] Vérification navigateur réelle en 390px et en 1440px, **0 erreur console, 0 débordement horizontal**
-- [x] Poussé sur `github.com/abdoulkaderkebe3-cloud/maelyse`, commit `c9f1ea8` sans co-auteur
+- [x] Poussé sur `github.com/abdoulkaderkebe3-cloud/maelyse`, commits sans co-auteur
+- [x] **Déployé sur Vercel et en ligne : https://maelyse.vercel.app**, dépôt GitHub relié au projet donc un push redéploie
+- [x] Protection de déploiement Vercel contournée, site vérifié public en HTTP (200 hors session connectée)
 
 ## En cours
-- [ ] Déploiement Vercel et vérification de l'URL en ligne
+- [ ] Attente de deux informations de Kader : heure de la fête et numéro WhatsApp
 
 ## À faire (priorisé)
 - [ ] **Renseigner `whatsappNumber` dans `src/data/invitation.ts`** (bloquant, le bouton de réponse est inerte sans lui)
 - [ ] **Renseigner `startTime` et `endTime`** (bloquant, un parent ne peut pas s'organiser sans)
-- [ ] Repasser l'URL absolue dans la balise `og:image` une fois le domaine Vercel connu
 - [ ] Tester le lien sur un vrai téléphone : aperçu WhatsApp, ouverture de Maps, envoi d'une réponse
 - [ ] Si le temps le permet : animation d'ouverture d'enveloppe, ajout au calendrier (.ics), galerie photo
 
@@ -49,6 +50,7 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**. Le site doit 
 - D-009 dépôt `maelyse` sur GitHub, déploiement Vercel
 - D-010 page en noindex et traduction automatique bloquée
 - D-011 carte Google Maps assombrie par filtre CSS
+- D-012 URL publique maelyse.vercel.app, et piège de la protection de déploiement Vercel
 
 ## Pièges rencontrés et solutions
 - **Le brief mélangeait deux produits**, une vitrine de service et une invitation → arbitré en D-004 avant d'écrire du code.
@@ -56,6 +58,7 @@ La fête est le **samedi 5 septembre 2026**, il reste **5 jours**. Le site doit 
 - **Chrome traduisait la page en français à la volée.** Découvert seulement en regardant l'image d'aperçu générée, qui est sortie en français alors que le HTML est en anglais. Un build vert ne l'aurait jamais montré. → `translate="no"` et meta `notranslate`.
 - **La carte Google blanche cassait tout le thème** → filtre CSS d'inversion, l'attribution Google restant visible comme l'exigent ses conditions.
 - **Le heredoc bash cale sur du TSX** contenant à la fois des apostrophes, des accolades et des littéraux gabarits → passer par l'écriture directe de fichier pour ces cas.
+- **La protection de déploiement Vercel rendait le lien inaccessible à tout le monde sauf à Kader**, l'alias renvoyant vers l'écran de connexion Vercel. Invisible depuis un navigateur déjà connecté. → rattacher le domaine au projet (`vercel domains add`) et non poser un alias (`vercel alias set`), puis contrôler le code HTTP hors session.
 - **Le hero avait un grand vide sous les boutons**, invisible à la lecture du code, vu à la capture → `justify-center` sur le conteneur.
 
 ## Notes importantes pour la prochaine session
