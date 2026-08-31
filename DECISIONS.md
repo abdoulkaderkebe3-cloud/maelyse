@@ -210,3 +210,58 @@ Même remarque pour deux lignes ajoutées au bloc d'informations : le **code ves
 **Leçon de méthode :** repérer qu'une référence ne colle pas ne suffit pas, il faut corriger partout où elle a laissé des traces. Ici l'ambiance visuelle avait été rectifiée et les textes oubliés, alors que ce sont les textes que les parents lisent.
 
 **Défaut corrigé au passage :** le retrait des flous d'arrière-plan (D-014) laissait le texte de la page transparaître derrière la barre d'action fixe du bas. Fond rendu entièrement opaque, ce qui est aussi moins coûteux à afficher.
+
+---
+
+## D-017 - 2026-08-31 : Refonte visuelle, ouverture cinématique et gâteau interactif
+
+**Demande de Kader :** « le rendu actuel ne me plaît pas trop, je veux un site incroyable, une animation de départ incroyable, ils doivent être époustouflés ».
+
+**Ce qui a été ajouté :**
+
+1. **Ouverture cinématique.** L'enveloppe arrive de loin en tournant sur trois axes, se stabilise et flotte, entourée de cinq étincelles en orbite et d'un halo qui respire derrière le sceau. À l'appui : onde de choc dorée, le sceau éclate, le rabat bascule en 3D, la lettre monte, puis **elle grandit jusqu'à remplir l'écran** avec un éclair de lumière. On entre littéralement dans la lettre. Environ deux secondes.
+2. **Ciel vivant.** Étoiles qui scintillent et **ballons qui montent**, dessinés dans un seul canvas.
+3. **Gâteau interactif à neuf bougies.** On touche chaque flamme pour la souffler, un filet de fumée s'échappe, la lueur sur le gâteau faiblit à mesure. Toutes éteintes : confettis et « Wish made! ». Un bouton « Blow them all out » sert de sortie au clavier et aux gros doigts. **C'est le seul endroit du site où l'enfant a quelque chose à faire**, et c'est ce qui fait qu'on remontre l'invitation à ses copains au lieu de la lire une fois.
+4. **Bandeau défilant** sous le hero, nom lettre par lettre, titres de section lettre par lettre, reflet mobile sur le grand chiffre, filet de progression du défilement.
+
+---
+
+## D-018 - 2026-08-31 : LE défaut qui expliquait tout, le fond du body
+
+**Symptôme :** Kader trouve le rendu fade. Le décor de fond (ciel, halos, étoiles) est bien dessiné, le canvas contient des pixels lumineux vérifiés au navigateur, mais **rien n'est visible à l'écran**.
+
+**Cause :** `body` avait un fond opaque. Comme `html` en a un aussi, le fond du body n'est plus propagé au viewport : il se peint comme un fond d'élément normal. Or, dans l'ordre de peinture, un fond d'élément passe **par-dessus** les descendants en z-index négatif. Le décor entier, en `-z-10`, était donc recouvert.
+
+**Correction :** `body` en `background: transparent`, le fond sombre restant porté par `html`.
+
+**Pourquoi c'est important au-delà de ce projet :** le défaut ne produit **aucune erreur**, ni au build, ni en console, ni dans les tests. Le code est juste, les éléments existent, ils ont les bonnes dimensions, et ils sont invisibles. Il ne se voit qu'en regardant l'écran. C'est exactement la raison de la règle « on regarde le rendu réel avant d'annoncer qu'une interface est prête ».
+
+---
+
+## D-019 - 2026-08-31 : Mesurer la fluidité, et une erreur de méthode à ne pas refaire
+
+**Contexte :** exigence de Kader, le site ne doit jamais ramer.
+
+**⚠️ ERREUR COMMISE, corrigée ensuite :** les premières mesures donnaient 4 images par seconde au défilement, et l'A/B désignait la **carte Google intégrée** comme responsable, avec un rapport de 1 à 2. J'ai retiré l'iframe sur cette base. **C'était faux.** L'onglet mesuré n'était pas au premier plan, et le navigateur bride les animations des onglets en arrière-plan. Vérification refaite onglet sélectionné : **144 images par seconde avec ou sans l'iframe**. Elle ne coûtait rien.
+
+**Règle qui en découle :** avant toute mesure de fluidité, s'assurer que l'onglet mesuré est bien au premier plan, et **toujours mesurer une page vide dans les mêmes conditions** pour connaître le plafond du navigateur. Ici la page vide monte à 141 images par seconde même avec le processeur ralenti six fois : le plafond n'est donc pas le bridage, et les écarts constatés sont réels.
+
+**Mesures honnêtes, onglet au premier plan :**
+- processeur normal : **86 à 145 images par seconde** selon la section, pire image 7 à 42 ms
+- processeur ralenti 6 fois, ce qui simule un téléphone très bas de gamme : **18 à 31 images par seconde**
+
+**Optimisation réellement efficace :** les animations infinies **tournent même quand leur section est hors écran**. La page en portait une trentaine en permanence, dont **dix-huit rien que pour les flammes des neuf bougies**, qui brûlaient pendant qu'on lisait l'adresse deux écrans plus bas. Un crochet `useAnimateInView` les met en veille tant que la section n'est pas proche de l'écran. Gain mesuré à 6x sur la section informations : de 14 à 31 images par seconde.
+
+**Autres optimisations retenues :** chaque ballon est pré-dessiné une fois dans un canvas hors écran puis simplement recopié, au lieu de recréer un dégradé radial et trois chemins par ballon et par image ; le canvas est en un pixel par point CSS ; le dessin est plafonné à 30 images par seconde ; la boucle s'arrête quand l'onglet passe en arrière-plan.
+
+**La carte intégrée n'est pas revenue** malgré la correction, mais pour de vraies raisons cette fois : le geste attendu est d'ouvrir Google Maps, la carte était recouverte d'un lien donc inutilisable sur place, elle jurait en gris au milieu d'une page nuit, et c'est une intégration tierce qui télécharge ses propres scripts et tuiles sur une 4G moyenne. Elle est remplacée par un repère dessiné, sans rue inventée, avec les coordonnées réelles.
+
+---
+
+## D-020 - 2026-08-31 : Les ballons restent sombres, à cause du contraste
+
+**Décision :** la palette des ballons est volontairement sombre (fuchsia foncé, violet profond, sarcelle, ambre brûlé, framboise), avec un petit reflet blanc net qui suffit à faire lire la forme.
+
+**Raison :** le décor passe **derrière le texte**. Un ballon doré clair derrière une ligne de texte fait tomber le contraste autour de 2:1, très en dessous du seuil lisible. Avec des teintes sombres, la luminance moyenne reste basse et le texte garde son contraste. La phrase du hero est passée de `muted` à `silver` pour la même raison.
+
+**Les cartes de contenu ont aussi été opacifiées** (de 50% à 85%) : un ballon qui traversait le formulaire de réponse gênait la lecture et faisait négligé.

@@ -1,17 +1,18 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { invitation } from '../data/invitation'
 import { useCountdown } from '../hooks/useCountdown'
 import { Stagger, staggerItem, easeOutExpo } from './Reveal'
+import { useAnimateInView } from '../hooks/useAnimateInView'
 
 const { copy } = invitation
 
-function Tile({ value, label }: { value: number; label: string }) {
-  const reduced = useReducedMotion()
+function Tile({ value, label, anime }: { value: number; label: string; anime: boolean }) {
+  const reduced = !anime
 
   return (
     <motion.div
       variants={reduced ? undefined : staggerItem}
-      className="relative flex flex-1 flex-col items-center overflow-hidden rounded-2xl border border-line bg-surface/60 px-2 py-4 sm:py-6"
+      className="relative flex flex-1 flex-col items-center overflow-hidden rounded-2xl border border-line bg-surface/80 px-2 py-4 sm:py-6"
     >
       {/* Lueur qui balaie la tuile, comme un projecteur qui passe. */}
       {!reduced && (
@@ -51,6 +52,7 @@ function Tile({ value, label }: { value: number; label: string }) {
 }
 
 export function Countdown() {
+  const { ref, animate } = useAnimateInView<HTMLDivElement>()
   const { days, hours, minutes, seconds, started } = useCountdown(invitation.dateISO)
 
   if (started) {
@@ -58,15 +60,15 @@ export function Countdown() {
   }
 
   return (
-    <div>
+    <div ref={ref}>
       <p className="mb-5 text-center font-body text-xs uppercase tracking-[0.28em] text-aqua">
         {copy.countdownTitle}
       </p>
       <Stagger className="flex gap-2 sm:gap-3" gap={0.11}>
-        <Tile value={days} label="days" />
-        <Tile value={hours} label="hours" />
-        <Tile value={minutes} label="min" />
-        <Tile value={seconds} label="sec" />
+        <Tile value={days} label="days" anime={animate} />
+        <Tile value={hours} label="hours" anime={animate} />
+        <Tile value={minutes} label="min" anime={animate} />
+        <Tile value={seconds} label="sec" anime={animate} />
       </Stagger>
     </div>
   )

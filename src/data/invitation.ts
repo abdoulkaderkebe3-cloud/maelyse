@@ -78,10 +78,20 @@ export const invitation = {
     timeLabel: 'Time',
     timeUnknown: 'Time to be confirmed',
     whereLabel: 'Where',
-    whereValue: 'Tap the map, it opens straight in Google Maps',
+    whereValue: 'Tap the location card, it opens straight in Google Maps',
     parentsLabel: 'For parents',
     parentsValue:
       'Parents are welcome to stay, and just as welcome to drop off and come back. Whatever suits you best.',
+
+    marquee: 'Maelyse · turns 9 · September 5th · you are invited',
+
+    cakeTitle: 'Nine candles are waiting',
+    cakeHint: 'Tap the flames, one by one',
+    cakeBlowAll: 'Blow them all out',
+    cakeDone: 'Wish made!',
+    cakeDoneHint: 'Now we just need you there on Saturday.',
+    cakeReset: 'Light them again',
+    cakeCandleAria: 'Blow out candle',
 
     planTitle: 'How the day goes',
     dressCodeLabel: 'Dress code',
@@ -90,7 +100,7 @@ export const invitation = {
     giftValue: 'Your child coming is already the best part. No pressure on presents.',
 
     locationTitle: 'Find us',
-    locationHint: 'Tap the map to open it in Google Maps',
+    locationHint: 'Tap to open',
     openMaps: 'Open in Google Maps',
 
     rsvpTitle: 'Will you be there?',
@@ -124,5 +134,3 @@ export const invitation = {
 /** Lien Google Maps ouvert au clic sur la carte. */
 export const mapsLink = `https://www.google.com/maps/search/?api=1&query=${invitation.location.latitude},${invitation.location.longitude}`
 
-/** Carte intégrée, sans clé API, volontairement chargée en différé. */
-export const mapsEmbed = `https://www.google.com/maps?q=${invitation.location.latitude},${invitation.location.longitude}&hl=en&z=16&output=embed`

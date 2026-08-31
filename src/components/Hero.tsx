@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 import { invitation } from '../data/invitation'
-import { DiscoBall } from './NightSky'
+import { DiscoBall } from './DiscoBall'
 import { easeOutExpo } from './Reveal'
 
 const { copy } = invitation
@@ -15,6 +15,17 @@ const container = {
 const item = {
   hidden: { opacity: 0, y: 22 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easeOutExpo } },
+}
+
+/** Le nom : chaque lettre bascule et se redresse, l'une après l'autre. */
+const letters = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.045 } },
+}
+
+const letter3d = {
+  hidden: { opacity: 0, y: 26, rotateX: -75 },
+  show: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.65, ease: easeOutExpo } },
 }
 
 export function Hero() {
@@ -60,11 +71,21 @@ export function Hero() {
         </motion.div>
 
         <motion.h1
-          variants={item}
+          variants={letters}
           style={textParallax}
           className="mt-8 font-display text-[2.6rem] leading-[1.05] text-ink sm:text-6xl"
+          aria-label={invitation.fullName}
         >
-          {invitation.fullName}
+          {invitation.fullName.split(' ').map((word, wordIndex) => (
+            <span key={wordIndex} aria-hidden="true" className="inline-block">
+              {word.split('').map((letter, letterIndex) => (
+                <motion.span key={letterIndex} variants={letter3d} className="inline-block">
+                  {letter}
+                </motion.span>
+              ))}
+              <span className="inline-block">&nbsp;</span>
+            </span>
+          ))}
         </motion.h1>
 
         <motion.div
@@ -83,7 +104,10 @@ export function Hero() {
         <motion.p
           variants={item}
           style={reduced ? {} : { scale: ageScale, opacity: fade }}
-          className="mt-2 bg-gradient-to-b from-white via-gold to-neon bg-clip-text font-display text-[8rem] leading-[0.9] text-transparent drop-shadow-[0_0_45px_rgba(217,70,239,.55)] sm:text-[10rem]"
+          className="mt-2 animate-shimmer bg-clip-text font-display text-[8rem] leading-[0.9] text-transparent drop-shadow-[0_0_50px_rgba(217,70,239,.6)] sm:text-[10rem]"
+          // Dégradé deux fois plus large que le texte : le décaler fait passer
+          // un reflet sur le chiffre sans rien redessiner autour.
+          data-shine=""
         >
           {invitation.age}
         </motion.p>
@@ -91,7 +115,7 @@ export function Hero() {
         <motion.p
           variants={item}
           style={textParallax}
-          className="mt-6 max-w-xs text-balance font-body text-base leading-relaxed text-muted sm:max-w-sm"
+          className="mt-6 max-w-xs text-balance font-body text-base leading-relaxed text-silver sm:max-w-sm"
         >
           {copy.tagline}
         </motion.p>
@@ -119,7 +143,7 @@ export function Hero() {
           </a>
           <a
             href="#location"
-            className="flex min-h-[52px] items-center justify-center rounded-full border border-line bg-surface/60 px-8 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
+            className="flex min-h-[52px] items-center justify-center rounded-full border border-line bg-surface/75 px-8 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
           >
             {copy.heroSecondary}
           </a>

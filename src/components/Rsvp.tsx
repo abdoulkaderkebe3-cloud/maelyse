@@ -94,7 +94,7 @@ export function Rsvp() {
   const showForm = status === 'idle' || status === 'sending' || status === 'error'
 
   return (
-    <div className="rounded-card border border-line bg-surface/50 p-5 sm:p-8">
+    <div className="rounded-card border border-line bg-surface/85 p-5 sm:p-8">
       <AnimatePresence mode="wait">
         {!showForm && (
           <motion.div

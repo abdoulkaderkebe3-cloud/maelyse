@@ -38,7 +38,8 @@
     -->
     <style>
       html { background: #06030f; }
-      body { margin: 0; background: #06030f; }
+      /* Transparent : le fond sombre est porté par <html>, sinon il recouvre le décor. */
+      body { margin: 0; background: transparent; }
       #boot {
         position: fixed;
         inset: 0;

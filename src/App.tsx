@@ -1,12 +1,14 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
 import { invitation } from './data/invitation'
-import { NightSky } from './components/NightSky'
+import { Sky } from './components/Sky'
 import { Envelope } from './components/Envelope'
 import { Hero } from './components/Hero'
+import { Marquee } from './components/Marquee'
 import { Section } from './components/Section'
 import { Reveal } from './components/Reveal'
 import { Countdown } from './components/Countdown'
+import { Cake } from './components/Cake'
 import { Details } from './components/Details'
 import { Plan } from './components/Plan'
 import { Location } from './components/Location'
@@ -31,6 +33,12 @@ function hasOpenedBefore() {
 export default function App() {
   const [envelopeDone, setEnvelopeDone] = useState(hasOpenedBefore)
 
+  // L'invitation commence toujours en haut, quelle que soit la position
+  // de défilement restaurée par le navigateur.
+  useEffect(() => {
+    if (!envelopeDone) window.scrollTo(0, 0)
+  }, [envelopeDone])
+
   const handleOpened = useCallback(() => {
     try {
       window.localStorage.setItem(OPENED_KEY, '1')
@@ -43,17 +51,34 @@ export default function App() {
   return (
     <>
       <ScrollProgress />
-      <NightSky />
+      <Sky />
 
       <AnimatePresence>
         {!envelopeDone && <Envelope key="envelope" onOpened={handleOpened} />}
       </AnimatePresence>
 
-      <main className="relative">
+      {/*
+        Tant que l'enveloppe est là, la page est masquée mais garde sa place :
+        le ciel étoilé et les ballons continuent de vivre derrière l'enveloppe,
+        sans que le contenu de l'invitation transparaisse au travers.
+      */}
+      <main
+        className={`relative transition-opacity duration-500 ${envelopeDone ? 'opacity-100' : 'invisible opacity-0'}`}
+        aria-hidden={!envelopeDone}
+      >
         <Hero />
+
+        <Marquee />
 
         <Section>
           <Countdown />
+        </Section>
+
+        {/* Le seul moment du site où l'enfant a quelque chose à faire */}
+        <Section>
+          <Reveal direction="scale">
+            <Cake />
+          </Reveal>
         </Section>
 
         <Section title={copy.detailsTitle}>
