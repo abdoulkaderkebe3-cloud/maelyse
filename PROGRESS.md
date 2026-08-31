@@ -1,12 +1,14 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-08-31 23:45
+> Dernière mise à jour : 2026-09-01 00:05
 
 ## État global
 **L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
 
 **Plus rien ne bloque l'envoi du lien.** Le dernier point ouvert, le nom du lieu, est tranché : ce sera « Abidjan », rien de plus (D-026).
 
-⚠️ **Tout ce travail n'est pas encore en ligne.** Le dernier `git push` date de 20:25, donc https://maelyse.vercel.app affiche encore l'ancienne version : ancien programme, ancienne heure, formulaire de réponse toujours présent. **Un commit et un push suffisent à publier.**
+✅ **Tout est commité, poussé et EN LIGNE sur https://maelyse.vercel.app.** Vérifié sur le site public : « From 2:00 PM », « Abidjan », programme natation et poterie, aucune section de réponse, gâteau correct, aucun trait noir sur le compte à rebours, 0 erreur console, aucun débordement horizontal.
+
+**Le lien est prêt à être envoyé aux invités.**
 
 La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 
@@ -34,10 +36,10 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - [x] Build vert (`npm run build`), vérifié au navigateur en 390px et 1440px, **0 erreur console, 0 débordement horizontal**
 
 ## En cours
-- [ ] Rien. Le code est propre et vérifié, il attend d'être commité et poussé.
+- [ ] Rien. Le site est en ligne et à jour.
 
 ## À faire (priorisé)
-- [ ] **Commit et push** de tout le travail non sauvegardé (la refonte de la session précédente + les changements d'aujourd'hui). Le push redéploie automatiquement.
+- [ ] **Envoyer le lien aux parents** sur WhatsApp
 - [ ] Tester sur un vrai téléphone : aperçu WhatsApp du lien, ouverture de Google Maps, son, jeu des étincelles
 - [ ] Optionnel : alléger `motion` via LazyMotion (~120 Ko gzippés aujourd'hui). **À ne pas tenter avant la fête.**
 - [ ] Optionnel : ajout au calendrier (.ics), galerie photo
@@ -77,8 +79,8 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **Le heredoc bash cale sur du TSX** → écriture directe de fichier pour ces cas.
 
 ## Notes importantes pour la prochaine session
-Le seul geste qui manque est **commit + push**. Le dépôt est relié au projet Vercel, un push sur `main` redéploie tout seul. Commits en français, **sans trailer de co-auteur**.
+**Le travail est terminé et en ligne.** Deux commits poussés le 2026-08-31 : `ed47688` pour le code, `aca4596` pour le journal. Aucun trailer de co-auteur.
 
-Après le push, contrôler que https://maelyse.vercel.app affiche bien « From 2:00 PM », le lieu « Abidjan », le programme natation/poterie, et qu'il n'y a plus de section de réponse.
+Plus aucun champ n'est en attente dans `src/config.ts`, tout le contenu est validé par Kader. Le dépôt est relié au projet Vercel, un push sur `main` redéploie tout seul.
 
-Plus aucun champ n'est en attente dans `src/config.ts`. Tout le contenu est validé par Kader.
+Ce qui reste est facultatif et sans urgence : test sur un vrai téléphone, ajout au calendrier (.ics), galerie photo. Ne pas toucher à `motion` avant la fête.

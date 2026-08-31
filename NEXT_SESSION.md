@@ -8,7 +8,7 @@ Salut Claude, on reprend le travail sur le projet **anniv**.
 Lis ces fichiers dans l'ordre pour reconstituer le contexte :
 1. `./CLAUDE.md` (constitution du projet)
 2. `./PROGRESS.md` (où on en est)
-3. `./DECISIONS.md` (26 décisions actées)
+3. `./DECISIONS.md` (27 décisions actées)
 
 **Résumé de la situation :**
 Invitation d'anniversaire de **Maelyse Kadyjat, 9 ans**, vraie fête le **samedi 5 septembre 2026 à 14h** à Abidjan. Page unique en anglais, mobile first, thème nuit néon, hébergée sur https://maelyse.vercel.app. Le dépôt `github.com/abdoulkaderkebe3-cloud/maelyse` est relié à Vercel, donc **un push sur `main` redéploie**.
@@ -17,9 +17,11 @@ La page s'ouvre sur une animation cinématique à la première visite, puis dér
 
 **Le contenu est complet.** Le 2026-08-31 au soir, Kader a tranché : fête à **14h**, **aucune heure de fin annoncée**, deux activités confirmées, **la natation et la poterie**, il a demandé de **retirer le formulaire de réponse et la ligne « For parents »**, et il a réduit le lieu affiché à **« Abidjan »**. Tout ça est fait, le build passe, le rendu a été vérifié en 390px et 1440px sans erreur console.
 
-⚠️ **Le point d'attention numéro un :** vérifie tout de suite avec `git status` si le travail est commité. À la dernière reprise, deux heures de refonte traînaient dans l'arbre de travail sans commit, et le site en ligne était en retard sur le disque sans que le journal le dise.
+**Tout est commité, poussé et en ligne**, vérifié sur le site public le 2026-08-31 au soir. L'invitation est prête à être envoyée aux parents.
 
-**Prochaine étape concrète :** commiter et pousser (commit en français, **jamais de trailer de co-auteur**), puis contrôler que https://maelyse.vercel.app affiche bien « From 2:00 PM », le programme natation/poterie et plus aucune section de réponse. Ensuite, tester le lien sur un vrai téléphone : aperçu WhatsApp, ouverture de Google Maps, son et jeu.
+⚠️ **Réflexe à garder :** commence toujours par un `git status`. À la reprise précédente, deux heures de refonte traînaient dans l'arbre de travail sans commit, et le site en ligne était en retard sur le disque sans que le journal le dise.
+
+**Prochaine étape, si Kader veut continuer :** rien d'obligatoire. Au choix, un test sur un vrai téléphone (aperçu WhatsApp, ouverture de Maps, son, jeu des étincelles), l'ajout au calendrier (.ics) ou une galerie photo. **Ne pas toucher à `motion` avant la fête**, l'allègement par LazyMotion est mécanique mais risqué à cinq jours.
 
 **Rien n'est en attente de Kader.** Tout le contenu est validé, y compris le lieu, qu'il a volontairement réduit à « Abidjan » (D-026) : la précision est portée par le bouton Google Maps.
 
