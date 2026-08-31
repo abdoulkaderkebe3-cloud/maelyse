@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { copy } from '../config'
-import { useParty } from '../context/PartyContext'
 
 /**
  * Barre d'action fixe en bas, mobile uniquement.
@@ -13,7 +12,6 @@ import { useParty } from '../context/PartyContext'
  * performance, le texte de la page transparaissait derrière la barre.
  */
 export function StickyCta() {
-  const { won } = useParty()
   const [pastHero, setPastHero] = useState(false)
   const [locationVisible, setLocationVisible] = useState(false)
 
@@ -50,11 +48,7 @@ export function StickyCta() {
         >
           <a
             href="#location"
-            className={`flex min-h-[52px] items-center justify-center rounded-full px-8 font-body text-base font-semibold transition-transform duration-200 active:scale-[0.97] ${
-              won
-                ? 'bg-gradient-to-r from-gold to-[#ffb347] text-[#3b1566] shadow-[0_0_30px_rgba(255,215,110,.5)]'
-                : 'bg-gradient-to-r from-neon to-violet text-white shadow-[0_0_30px_rgba(217,70,239,.4)]'
-            }`}
+            className="flex min-h-[52px] items-center justify-center rounded-full bg-gold px-8 font-body text-base font-semibold text-[#1f0b3a] transition-opacity duration-200 hover:opacity-90 active:scale-[0.98]"
           >
             {copy.heroPrimary}
           </a>

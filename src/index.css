@@ -33,7 +33,6 @@
   --animate-spin-slow: spin 18s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-rise: rise 0.7s ease-out both;
-  --animate-shimmer: shimmer 6s linear infinite;
 }
 
 @keyframes twinkle {
@@ -47,33 +46,11 @@
 }
 
 /* Reflet qui traverse le grand chiffre, comme une lumière qui passe dessus. */
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
 @keyframes rise {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/*
-  Le grand chiffre du hero. Le dégradé fait deux fois la largeur du texte,
-  et l'animation shimmer le fait défiler : un reflet traverse le chiffre.
-*/
-[data-shine] {
-  background-image: linear-gradient(
-    100deg,
-    #ffffff 0%,
-    #ffd76e 18%,
-    #d946ef 38%,
-    #22d3ee 52%,
-    #d946ef 66%,
-    #ffd76e 84%,
-    #ffffff 100%
-  );
-  background-size: 200% 100%;
-}
 
 html {
   scroll-behavior: smooth;

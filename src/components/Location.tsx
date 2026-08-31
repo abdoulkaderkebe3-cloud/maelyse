@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
 import { copy, mapsLink, venue } from '../config'
 import { useAnimateInView } from '../hooks/useAnimateInView'
-import { Spark } from './Spark'
 
 /**
  * Le lieu.
@@ -22,15 +21,12 @@ export function Location() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Étincelle 6 sur 9, accrochée au coin de la carte */}
-      <Spark id="venue" className="left-[6%] top-[6%]" />
-
       <a
         href={mapsLink}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={copy.openMaps}
-        className="group relative block overflow-hidden rounded-card border border-line bg-gradient-to-b from-[#1a0f33] to-[#0c0620] p-8 shadow-[0_0_50px_rgba(139,92,246,.18)] transition-colors duration-200 hover:border-aqua/50"
+        className="group relative block overflow-hidden rounded-card border border-line bg-gradient-to-b from-[#1a0f33] to-[#0c0620] p-8 transition-colors duration-200 hover:border-aqua/50"
       >
         {/* Cercles concentriques : un repère, pas une carte */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -44,30 +40,21 @@ export function Location() {
                 marginLeft: -(60 + ring * 55),
                 marginTop: -(60 + ring * 55),
               }}
-              animate={animate ? { opacity: [0.15, 0.5, 0.15] } : undefined}
-              transition={{ duration: 3.2, delay: ring * 0.55, repeat: Infinity, ease: 'easeInOut' }}
+              /* Cercles fixes. Trois anneaux qui palpitaient en boucle sous
+                 un repère qui flottait déjà, ça faisait beaucoup pour une carte
+                 qui ne dit qu'une chose : c'est ici. */
             />
           ))}
         </div>
 
         <div className="relative flex flex-col items-center py-4 text-center">
-          {/* Onde qui part du repère */}
-          {animate && (
-            <motion.span
-              aria-hidden="true"
-              className="absolute top-0 h-12 w-12 rounded-full bg-neon/30"
-              animate={{ scale: [1, 2.6], opacity: [0.55, 0] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut' }}
-            />
-          )}
-
           <motion.svg
             aria-hidden="true"
             viewBox="0 0 24 24"
             fill="none"
-            className="relative h-12 w-12 drop-shadow-[0_0_18px_rgba(217,70,239,.7)]"
-            animate={animate ? { y: [0, -5, 0] } : undefined}
-            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative h-12 w-12"
+            animate={animate ? { y: [0, -4, 0] } : undefined}
+            transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
           >
             <path d="M12 22s7.5-6.1 7.5-12a7.5 7.5 0 1 0-15 0c0 5.9 7.5 12 7.5 12Z" fill="url(#pin)" />
             <circle cx="12" cy="10" r="2.8" fill="#1a0930" />
@@ -99,7 +86,7 @@ export function Location() {
         href={mapsLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-neon to-violet px-6 font-body text-base font-semibold text-white shadow-[0_0_28px_rgba(217,70,239,.35)] transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.97]"
+        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-gold px-6 font-body text-base font-semibold text-[#1f0b3a] transition-opacity duration-200 ease-out hover:opacity-90 active:scale-[0.98]"
       >
         <svg
           aria-hidden="true"

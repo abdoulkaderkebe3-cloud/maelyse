@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
 import { copy, party, venue } from '../config'
 import { Stagger, staggerItem } from './Reveal'
-import { Spark } from './Spark'
 
 function Row({ label, value, muted = false }: { label: string; value: string; muted?: boolean }) {
   return (
@@ -29,9 +28,6 @@ export function Details() {
 
   return (
     <div className="relative">
-      {/* Étincelle 4 sur 9, dans la marge du bloc d'informations */}
-      <Spark id="details" className="right-[3%] top-[14%]" />
-
       <Stagger className="rounded-card border border-line bg-surface/85 px-5 py-2 sm:px-8">
         <Row label={copy.whenLabel} value={`${party.dayLabel}, ${party.dateLabel}`} />
         <Row label={copy.timeLabel} value={time} muted={!party.startTime} />

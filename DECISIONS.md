@@ -420,3 +420,45 @@ Le temps de pause passe donc de **20 ms à environ une seconde**. Mesure réelle
 **Sans bridage** : 141 images par seconde médianes, pire image 27,8 ms, **aucune image au-delà de 33 ms**. Page vide de référence dans les mêmes conditions : 145 images par seconde, ce qui confirme que le plafond du navigateur n'est pas en cause.
 
 **La règle de méthode, deux fois apprise :** ne jamais comparer deux mesures de fluidité prises à la suite sur la même page. Recharger, ou au minimum jeter une passe de chauffe. Une page qui vient d'être parcourue n'est plus dans le même état que la première fois.
+
+---
+
+## D-031 - 2026-08-31 : Dépouillement, parce que la page ressemblait à un site généré
+
+**Ce que Kader a dit :** « ça ressemble trop à un site vibe codé, il y va de ma crédibilité ».
+
+**Le diagnostic, et il compte plus que la correction :** aucun élément n'était raté isolément. C'est l'**accumulation** qui trahit une page générée. Sept choses bougeaient en même temps, chaque bloc avait son halo, chaque couleur son dégradé. La retenue est ce qui distingue un travail de designer d'un empilement d'effets, et une machine n'empile pas par erreur, elle empile parce que rien ne lui coûte d'ajouter.
+
+**Ce qui a été retiré :**
+
+- **Le bandeau défilant.** Il répétait en boucle « Maelyse · turns 9 · September 5th · you are invited », c'est-à-dire mot pour mot ce que le hero dit juste au-dessus. C'est le motif numéro un des pages générées.
+- **Le dégradé arc-en-ciel animé du grand « 9 »**, dans le hero et dans l'ouverture. Remplacé par un or plein. Le chiffre gagne en présence en perdant son effet.
+- **Le balayage lumineux des tuiles du compte à rebours.** Quatre tuiles côte à côte, donc quatre projecteurs qui passaient en permanence pendant qu'on essayait de lire quatre nombres.
+- **Les boutons en dégradé magenta vers violet avec halo néon**, l'autre grande signature. Remplacés par un aplat or avec texte sombre.
+- **Le jeu des neuf étincelles en entier** : les huit étincelles cachées, le compteur, l'écran de victoire, les feux d'artifice. Cinq composants supprimés, et la moitié de `PartyContext`.
+- **Les lueurs superflues** : l'onde qui pulsait sous le repère du lieu, les trois anneaux qui palpitaient, l'ombre néon de la carte, le halo du pin.
+
+**Ce qui reste, et pourquoi :** l'ouverture à l'enveloppe (c'est le seul vrai moment de mise en scène, et il est demandé), le gâteau à souffler (la seule chose que l'enfant peut faire), le ciel et les ballons (ils sont derrière le texte, pas dessus, et ils ne coûtent rien, voir D-030), la boule à facettes (elle porte la direction artistique de D-003).
+
+**Le contraste s'améliore au passage.** Le bouton principal était du texte blanc sur un dégradé magenta, soit environ 2,6:1, très en dessous du seuil AA que le projet s'impose. L'aplat or avec texte `#1f0b3a` monte à environ 14:1.
+
+**Et la fluidité double.** Processeur bridé 4 fois, même protocole que D-030 :
+
+| | Image médiane | Pire image | Images > 50 ms |
+|---|---|---|---|
+| Avant dépouillement | 28,0 ms (36 i/s) | 90,5 ms | 6 sur 150 |
+| Après | **13,8 ms (72 i/s)** | 55,4 ms | 1 sur 370 |
+
+Le paquet passe de 382,6 à 370,6 Ko, la feuille de style de 55,4 à 48,0 Ko.
+
+**Ce qu'il faut en retenir :** les effets ne se paient pas qu'en crédibilité, ils se paient aussi en millisecondes. Retirer ce qui ne servait à rien a rendu la page deux fois plus fluide sans qu'on optimise quoi que ce soit.
+
+---
+
+## D-032 - 2026-08-31 : Le compteur « 1 / 9 » était la preuve du problème
+
+**Ce qui s'est passé :** Kader a demandé « le 1/9 sert à quoi ? ». C'est le compteur du jeu des étincelles, posé dans le coin haut droit de sa propre invitation.
+
+**Pourquoi c'est la bonne question :** si le propriétaire du site doit demander à quoi sert un élément de son interface, un parent qui reçoit le lien sur WhatsApp ne se le demandera même pas, il l'ignorera. Un élément d'interface qui a besoin d'être expliqué et qui ne l'est pas est un élément à retirer.
+
+**La leçon, pour les prochains projets :** le jeu était une bonne idée mal introduite. Il a été ajouté en D-022 sans jamais être validé par Kader, et sans une seule ligne à l'écran pour l'annoncer. Une fonctionnalité que personne n'a demandée et que rien n'explique finit toujours par être un élément décoratif de plus.

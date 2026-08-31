@@ -9,7 +9,6 @@ import {
 } from 'motion/react'
 import { copy, party } from '../config'
 import { DiscoBall } from './DiscoBall'
-import { Spark } from './Spark'
 import { easeOutExpo } from './Reveal'
 
 /** Entrée en cascade des blocs, au premier affichage. */
@@ -96,20 +95,13 @@ export function Hero() {
       ref={ref}
       className="relative flex min-h-[100svh] flex-col items-center overflow-hidden px-5 pb-10 pt-4 text-center"
     >
-      {/* Étincelle 1 sur 9, flottant dans le ciel du hero */}
-      <Spark id="sky" className="left-[14%] top-[20%]" />
-
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
         className="flex w-full max-w-2xl flex-1 flex-col items-center justify-center"
       >
-        {/*
-          Centrée et non calée à gauche : le bouton du son et le compteur
-          d'étincelles occupent les deux coins hauts de l'écran, et une accroche
-          calée à gauche passait dessous.
-        */}
+        {/* Centrée : le bouton du son occupe le coin haut gauche de l'écran. */}
         <motion.p
           variants={item}
           style={textStyle}
@@ -156,8 +148,7 @@ export function Hero() {
         <motion.p
           variants={item}
           style={reduced ? {} : { scale: ageScale, opacity: fade, x: ageShiftX }}
-          className="mt-2 animate-shimmer bg-clip-text font-display text-[8rem] leading-[0.9] text-transparent drop-shadow-[0_0_50px_rgba(217,70,239,.6)] sm:text-[10rem]"
-          data-shine=""
+          className="mt-2 font-display text-[8rem] leading-[0.9] text-gold sm:text-[10rem]"
         >
           {party.age}
         </motion.p>
@@ -192,7 +183,7 @@ export function Hero() {
           */}
           <a
             href="#location"
-            className="flex min-h-[52px] items-center justify-center rounded-full bg-gradient-to-r from-neon to-violet px-8 font-body text-base font-semibold text-white shadow-[0_0_30px_rgba(217,70,239,.4)] transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.97]"
+            className="flex min-h-[52px] items-center justify-center rounded-full bg-gold px-8 font-body text-base font-semibold text-[#1f0b3a] transition-opacity duration-200 ease-out hover:opacity-90 active:scale-[0.98]"
           >
             {copy.heroPrimary}
           </a>

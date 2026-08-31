@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
 import { plan } from '../config'
 import { Stagger, staggerItem } from './Reveal'
-import { Spark } from './Spark'
 
 /**
  * Déroulé de la fête, sans horaires.
@@ -13,9 +12,6 @@ export function Plan() {
 
   return (
     <div className="relative">
-      {/* Étincelle 5 sur 9, au bout du fil du programme */}
-      <Spark id="plan" className="right-[8%] top-[52%]" />
-
       <Stagger className="relative flex flex-col gap-6 pl-8" gap={0.12}>
         {/* Le fil qui relie les étapes */}
         <span

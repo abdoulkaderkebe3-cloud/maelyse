@@ -368,8 +368,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
             </motion.p>
 
             <motion.p
-              className="mt-1 bg-clip-text font-display text-[5.5rem] leading-none text-transparent drop-shadow-[0_0_45px_rgba(217,70,239,.6)] sm:text-[7rem]"
-              data-shine=""
+              className="mt-1 font-display text-[5.5rem] leading-none text-gold sm:text-[7rem]"
               initial={{ opacity: 0, scale: 0.4 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.7, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}

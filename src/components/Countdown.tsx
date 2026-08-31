@@ -3,7 +3,6 @@ import { copy, party } from '../config'
 import { useCountdown } from '../hooks/useCountdown'
 import { useAnimateInView } from '../hooks/useAnimateInView'
 import { Stagger, staggerItem, easeOutExpo } from './Reveal'
-import { Spark } from './Spark'
 
 /**
  * Une tuile du compte à rebours, en tableau à volets.
@@ -20,16 +19,12 @@ function Tile({ value, label, anime }: { value: number; label: string; anime: bo
       variants={anime ? staggerItem : undefined}
       className="relative flex flex-1 flex-col items-center overflow-hidden rounded-2xl border border-line bg-surface/80 px-2 py-4 sm:py-6"
     >
-      {/* Lueur qui balaie la tuile, comme un projecteur qui passe */}
-      {anime && (
-        <motion.span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-violet/20 to-transparent"
-          animate={{ x: ['-120%', '260%'] }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 2 }}
-        />
-      )}
-
+      {/*
+        Pas de lueur qui balaie la tuile. Elle y était, et sur quatre tuiles côte
+        à côte ça faisait quatre projecteurs qui passaient en permanence pendant
+        qu'on essayait de lire quatre nombres. Le compte à rebours bouge déjà :
+        les chiffres changent tout seuls.
+      */}
       <span
         className="relative block h-9 w-full sm:h-14"
         style={{ perspective: '420px' }}
@@ -78,9 +73,6 @@ export function Countdown() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Étincelle 2 sur 9, posée sur le coin du compte à rebours */}
-      <Spark id="countdown" className="right-[4%] top-0" />
-
       <p className="mb-5 text-center font-body text-xs uppercase tracking-[0.28em] text-aqua">
         {copy.countdownTitle}
       </p>

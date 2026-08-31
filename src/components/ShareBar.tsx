@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { copy, party } from '../config'
 import { useParty } from '../context/PartyContext'
-import { Spark } from './Spark'
 
 /** Partage natif sur téléphone, repli sur la copie du lien ailleurs. */
 export function ShareBar() {
@@ -39,8 +38,6 @@ export function ShareBar() {
   return (
     <div className="relative text-center">
       {/* Étincelle 7 sur 9 */}
-      <Spark id="share" className="left-[12%] top-[10%]" />
-
       <p className="font-body text-sm text-muted">{copy.shareTitle}</p>
       <button
         type="button"

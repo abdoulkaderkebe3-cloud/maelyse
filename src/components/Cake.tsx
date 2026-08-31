@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { copy, game, party } from '../config'
+import { copy, party } from '../config'
 import { useParty } from '../context/PartyContext'
 import { useAnimateInView } from '../hooks/useAnimateInView'
 import { easeOutExpo } from './Reveal'
@@ -102,23 +102,19 @@ function Candle({
  * Le gâteau, avec ses neuf bougies à souffler.
  *
  * C'est le seul endroit du site où l'enfant a quelque chose à faire, et c'est
- * aussi la NEUVIÈME étincelle du jeu : celle-là ne se trouve pas en cherchant,
- * elle se gagne en soufflant toutes les bougies. Sans elle, impossible de
- * terminer, ce qui garantit que tout le monde passe par le gâteau.
+ * la seule chose interactive qui reste après le retrait du jeu des étincelles
+ * (D-031). Une invitation n'a pas besoin de plus.
  */
 export function Cake() {
   const { ref, animate, reduced } = useAnimateInView<HTMLDivElement>()
-  const { collect, found, playSound } = useParty()
+  const { playSound } = useParty()
   const [lit, setLit] = useState<boolean[]>(() => CANDLES.map(() => true))
 
   const remaining = lit.filter(Boolean).length
   const done = remaining === 0
-  const sparkEarned = found.includes(game.cakeId)
 
   function finish() {
     void wishConfetti()
-    // La neuvième étincelle est décernée ici. `collect` ignore les doublons.
-    collect(game.cakeId)
   }
 
   function blow(index: number) {
@@ -253,26 +249,6 @@ export function Cake() {
         <div className="relative left-1/2 z-20 mt-1 h-2.5 w-[108%] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#e8edf5] via-silver/60 to-silver/10 shadow-[0_10px_25px_rgba(0,0,0,.5)]" />
       </motion.div>
 
-      {/* Récompense : l'étincelle gagnée sur le gâteau */}
-      <AnimatePresence>
-        {sparkEarned && (
-          <motion.p
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: easeOutExpo }}
-            className="mt-6 flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-2 font-body text-sm text-gold"
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4">
-              <path
-                d="M12 2.6l2.1 6.1 6.4.2-5.1 3.9 1.8 6.2L12 15.3l-5.2 3.7 1.8-6.2-5.1-3.9 6.4-.2z"
-                fill="currentColor"
-              />
-            </svg>
-            {copy.sparkFirst}
-          </motion.p>
-        )}
-      </AnimatePresence>
 
       {/* Sortie clavier et gros doigts : la même action en un seul bouton */}
       <button

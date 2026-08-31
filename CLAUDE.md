@@ -62,7 +62,9 @@ Conséquence sur toute l'interface :
 
 ## Direction artistique
 
-Fixée par Kader avec images de référence, voir D-003.
+Fixée par Kader avec images de référence, voir D-003. **Dépouillée en D-031** : la page accumulait trop d'effets et ressemblait à un site généré, ce qui est un problème de crédibilité pour Kader.
+
+**Règle qui en découle, à appliquer à tout ajout futur :** un effet doit gagner sa place. Pas de bandeau défilant, pas de dégradé sur du texte, pas de halo néon sur un bouton, pas d'animation infinie qui ne raconte rien. La couleur d'action est un **aplat or avec texte sombre**, jamais un dégradé magenta. Dans le doute, retirer.
 
 Nuit électrique et haut de gamme : noir profond, dégradés violet électrique, pourpre néon et bleu turquoise, touches dorées et argentées sur les détails et les boutons. Halos néon, boule à facettes discrète en arrière-plan, étoiles scintillantes, titre en serif.
 
@@ -87,7 +89,7 @@ Les 4 piliers du CLAUDE.md racine s'appliquent. Spécificités :
 
 - **Motif en Z**, page de faible densité : le prénom en haut, la date au centre, le bouton d'action en bas et atteignable sans scroll, ou en barre fixe basse. Depuis D-024 ce bouton unique est « See the place » et descend vers le lieu.
 - **Thème sombre unique**, exception assumée au thème double du workspace. Une invitation de soirée n'a pas de mode clair.
-- **Contraste AA malgré le néon** : le violet saturé sur noir tombe autour de 3:1, il sert donc aux fonds, halos et bordures, jamais au texte courant. Le doré, le turquoise clair et le blanc portent le texte.
+- **Contraste AA malgré le néon** : le violet saturé sur noir tombe autour de 3:1, il sert donc aux fonds, halos et bordures, jamais au texte courant. Le doré, le turquoise clair et le blanc portent le texte. **Les boutons sont un aplat or avec texte `#1f0b3a`**, environ 14:1 ; l'ancien blanc sur dégradé magenta tombait à 2,6:1 et échouait au seuil (D-031).
 - **Les animations ne bloquent jamais l'information.** L'ouverture se rejoue à chaque chargement (D-029), donc elle doit rester interruptible : l'enveloppe attend un appui et ne part jamais seule, et une fois lancée, un appui n'importe où l'abrège (D-028). `transform` et `opacity` uniquement, `prefers-reduced-motion` respecté, page lisible avec toutes les animations coupées.
 - **Poids de la page surveillé.** L'invité est sur un téléphone d'entrée de gamme en 4G moyenne. Pas de vidéo de fond, pas de librairie d'animation lourde, images dimensionnées et compressées.
 - **Il n'y a plus de formulaire** depuis D-024. La règle des 5 états reste valable pour tout formulaire qui reviendrait.
@@ -105,9 +107,10 @@ Les 4 piliers du CLAUDE.md racine s'appliquent. Spécificités :
 - [x] ~~Réponse de présence par message WhatsApp pré-rempli~~ retirée en D-024
 
 **Souhaitables, faites :**
-- [x] Ouverture cinématique à la première visite
+- [x] Ouverture cinématique, rejouée à chaque chargement et interruptible (D-028, D-029)
 - [x] Musique d'ambiance (jamais en lecture automatique)
-- [x] Gâteau interactif et jeu des neuf étincelles
+- [x] Gâteau interactif
+- [x] ~~Jeu des neuf étincelles~~ retiré en D-031
 
 **Souhaitables, pas faites :**
 - [ ] Ajout au calendrier (.ics)

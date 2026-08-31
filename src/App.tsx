@@ -6,7 +6,6 @@ import { PartyProvider, useParty } from './context/PartyContext'
 import { Sky } from './components/Sky'
 import { Intro } from './components/Intro'
 import { Hero } from './components/Hero'
-import { Marquee } from './components/Marquee'
 import { Section } from './components/Section'
 import { Reveal } from './components/Reveal'
 import { Countdown } from './components/Countdown'
@@ -17,10 +16,7 @@ import { Location } from './components/Location'
 import { ShareBar } from './components/ShareBar'
 import { StickyCta } from './components/StickyCta'
 import { ScrollProgress } from './components/ScrollProgress'
-import { SparkCounter } from './components/SparkCounter'
 import { SoundToggle } from './components/SoundToggle'
-import { Spark } from './components/Spark'
-import { Victory } from './components/Victory'
 
 /**
  * L'ouverture se rejoue à CHAQUE chargement de la page.
@@ -67,13 +63,8 @@ function Invitation() {
         {!introDone && <Intro key="intro" onDone={finishIntro} />}
       </AnimatePresence>
 
-      {/* Commandes permanentes, hors du flux de lecture */}
-      {introDone && (
-        <>
-          <SoundToggle />
-          <SparkCounter />
-        </>
-      )}
+      {/* Seule commande permanente, hors du flux de lecture */}
+      {introDone && <SoundToggle />}
 
       {/*
         Tant que l'ouverture est là, la page est masquée mais garde sa place :
@@ -88,8 +79,12 @@ function Invitation() {
       >
         <Hero />
 
-        <Marquee />
-
+        {/*
+          Il y avait ici un bandeau défilant qui répétait en boucle « Maelyse ·
+          turns 9 · September 5th · you are invited », c'est-à-dire exactement ce
+          que le hero vient de dire, juste au-dessus. Retiré : c'est le motif qui
+          signale une page générée plutôt qu'une page dessinée (D-031).
+        */}
         <Section>
           <Countdown />
         </Section>
@@ -122,9 +117,6 @@ function Invitation() {
         </Section>
 
         <footer className="relative px-5 pb-24 pt-4 text-center sm:pb-14">
-          {/* Étincelle 8 sur 9, la dernière cachée. La neuvième est sur le gâteau. */}
-          <Spark id="footer" className="right-[16%] top-[6%]" />
-
           <Reveal direction="blur" distance={16}>
             <p className="font-display text-lg tracking-wide text-muted">{copy.footer}</p>
           </Reveal>
@@ -132,7 +124,6 @@ function Invitation() {
       </main>
 
       <StickyCta />
-      <Victory />
     </>
   )
 }

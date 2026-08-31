@@ -96,24 +96,7 @@ export const venue = {
 export const mapsLink = `https://www.google.com/maps/search/?api=1&query=${venue.latitude},${venue.longitude}`
 
 // ---------------------------------------------------------------------------
-// 4. LE JEU DES ÉTINCELLES
-// ---------------------------------------------------------------------------
-
-export const game = {
-  /** Combien d'étincelles à trouver. Par défaut, l'âge de l'enfant. */
-  total: party.age,
-  /**
-   * Huit sont cachées dans la page, la neuvième se gagne en soufflant
-   * toutes les bougies. Ces identifiants servent à ne pas compter deux fois.
-   */
-  hiddenIds: ['sky', 'marquee', 'countdown', 'details', 'plan', 'venue', 'share', 'footer'],
-  cakeId: 'cake',
-  /** Le jeu se souvient de la progression d'une visite à l'autre. */
-  storageKey: 'maelyse-sparks-v1',
-} as const
-
-// ---------------------------------------------------------------------------
-// 5. LE SON
+// 4. LE SON
 // ---------------------------------------------------------------------------
 
 export const sound = {
@@ -126,7 +109,7 @@ export const sound = {
 } as const
 
 // ---------------------------------------------------------------------------
-// 6. LE PROGRAMME
+// 5. LE PROGRAMME
 // ---------------------------------------------------------------------------
 // Les DEUX activités sont confirmées par Kader : natation et poterie.
 // L'accueil et le gâteau restent une proposition évidente.
@@ -147,10 +130,10 @@ export const plan: readonly { title: string; text: string }[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// 7. TOUS LES TEXTES
+// 6. TOUS LES TEXTES
 // ---------------------------------------------------------------------------
 // Le site est en anglais. Les textes s'adressent aux PARENTS, qui sont ceux qui
-// ouvrent le lien et décident ; le visuel et le jeu s'adressent à l'enfant.
+// ouvrent le lien et décident, pendant que le visuel s'adresse à l'enfant.
 
 export const copy = {
   // Ouverture
@@ -167,9 +150,6 @@ export const copy = {
   /** Il n'y a plus de formulaire de réponse : la seule action de la page est le lieu. */
   heroPrimary: 'See the place',
   scrollHint: 'Scroll',
-
-  // Bandeau défilant
-  marquee: 'Maelyse · turns 9 · September 5th · you are invited',
 
   // Compte à rebours
   countdownTitle: 'The party starts in',
@@ -214,19 +194,6 @@ export const copy = {
 
   // Pied de page
   footer: 'We cannot wait to celebrate with you.',
-
-  // Le jeu
-  sparkAria: 'A hidden spark',
-  sparkCounterAria: 'Sparks found',
-  sparkFirst: 'You found a spark!',
-  sparkMore: 'Keep looking, there are more.',
-  sparkAlmost: 'One left. It is on the cake.',
-  gameWonTitle: 'You found all nine!',
-  gameWonBody:
-    'Nine sparks for nine years. Thank you for looking, and please come on Saturday, it will not be the same without you.',
-  gameWonSigned: 'Maelyse',
-  gameWonClose: 'Back to the party',
-  gameReset: 'Play again',
 
   // Son
   soundOn: 'Turn the music on',
