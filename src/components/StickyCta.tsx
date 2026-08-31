@@ -41,7 +41,9 @@ export function StickyCta() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 90, opacity: 0 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-night/90 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:hidden"
+          // Fond entièrement opaque : sans flou d'arrière-plan (retiré pour la
+          // performance), le texte de la page transparaissait derrière la barre.
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-night px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:hidden"
         >
           <a
             href="#rsvp"

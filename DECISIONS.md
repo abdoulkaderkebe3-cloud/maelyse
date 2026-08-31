@@ -184,3 +184,29 @@ Anglais simple et chaleureux, pas de tournures compliquées : à Abidjan, une pa
 ⚠️ **Ces quatre moments sont une proposition écrite par Claude, pas une information confirmée par Kader.** Ils sont plausibles pour un anniversaire de 9 ans mais restent inventés. Ils vivent dans `invitation.plan` et doivent être relus, corrigés ou supprimés avant l'envoi du lien. Vider le tableau retire la section proprement.
 
 Même remarque pour deux lignes ajoutées au bloc d'informations : le **code vestimentaire** (« tout ce qui brille ») et la **mention sur les cadeaux** (« votre enfant qui vient, c'est déjà le principal »). Utiles aux parents, qui posent toujours ces deux questions, mais à valider.
+
+---
+
+## D-016 - 2026-08-31 : Le vocabulaire de soirée est retiré, c'est une fête d'enfant
+
+**Correction demandée par Kader :** « c'est une fête d'anniversaire d'un enfant, tu parles de danse sur le site ».
+
+**Il a raison, et l'erreur était déjà identifiée sans être corrigée.** D-003 signalait que la référence « Euphoria » du brief était un univers d'adultes, mais seule l'ambiance visuelle avait été repositionnée. Le vocabulaire du brief, lui, était resté tel quel dans les textes anglais.
+
+**Ce qui a été réécrit :**
+
+| Avant | Après |
+|---|---|
+| « Nine years of joy, and a dance floor waiting for you. » | « Nine candles, one big cake, and a party that would not be the same without you. » |
+| Étape « Dance floor » : « The disco ball goes on and the music does the rest. » | Étape « Games » : « Party games, small prizes, and a lot of laughing. » |
+| « Say hello, grab a drink and pick your best pair of sunglasses. » | « Arrive, say hello, and settle in with the other children. » |
+| « Anything that shines. Sequins, colours, sunglasses, all welcome. » | « Your favourite party outfit. Bright colours very welcome. » |
+| « See you on the dance floor. » | « We cannot wait to celebrate with you. » |
+| « It is today. See you tonight! » | « It is today. See you very soon! » |
+| Description de partage : « a night of music, lights and cake » | « games, cake and a big birthday celebration » |
+
+**Ce qui n'a PAS changé :** la direction artistique. Le noir, les néons violets et turquoise, la boule à facettes et le sceau doré sont la demande explicite de Kader avec images de référence, et une boule à facettes dans une fête d'enfant est une décoration, pas une ambiance de boîte de nuit. Seuls les mots ont bougé.
+
+**Leçon de méthode :** repérer qu'une référence ne colle pas ne suffit pas, il faut corriger partout où elle a laissé des traces. Ici l'ambiance visuelle avait été rectifiée et les textes oubliés, alors que ce sont les textes que les parents lisent.
+
+**Défaut corrigé au passage :** le retrait des flous d'arrière-plan (D-014) laissait le texte de la page transparaître derrière la barre d'action fixe du bas. Fond rendu entièrement opaque, ce qui est aussi moins coûteux à afficher.

@@ -52,10 +52,10 @@ export const invitation = {
    * Adapte-les à ce qui est réellement prévu, ou vide le tableau pour retirer la section.
    */
   plan: [
-    { title: 'Welcome', text: 'Say hello, grab a drink and pick your best pair of sunglasses.' },
-    { title: 'Dance floor', text: 'The disco ball goes on and the music does the rest.' },
+    { title: 'Welcome', text: 'Arrive, say hello, and settle in with the other children.' },
+    { title: 'Games', text: 'Party games, small prizes, and a lot of laughing.' },
     { title: 'Cake and candles', text: 'Nine candles, one wish, and a very loud happy birthday.' },
-    { title: 'Games and photos', text: 'Silly games, a photo corner, and prizes to take home.' },
+    { title: 'Photos', text: 'A photo corner, so everyone goes home with a picture.' },
   ],
 
   /** Textes anglais. Ils s'adressent aux parents, le visuel s'adresse à l'enfant. */
@@ -65,13 +65,13 @@ export const invitation = {
 
     eyebrow: 'You are invited',
     turns: 'turns',
-    tagline: 'Nine years of joy, and a dance floor waiting for you.',
+    tagline: 'Nine candles, one big cake, and a party that would not be the same without you.',
     heroPrimary: "I'll be there",
     heroSecondary: 'See the place',
 
     countdownTitle: 'The party starts in',
-    countdownToday: 'It is today. See you tonight!',
-    countdownOver: 'What a night. Thank you for celebrating with us.',
+    countdownToday: 'It is today. See you very soon!',
+    countdownOver: 'What a day. Thank you for celebrating with us.',
 
     detailsTitle: 'Everything you need to know',
     whenLabel: 'When',
@@ -85,7 +85,7 @@ export const invitation = {
 
     planTitle: 'How the day goes',
     dressCodeLabel: 'Dress code',
-    dressCodeValue: 'Anything that shines. Sequins, colours, sunglasses, all welcome.',
+    dressCodeValue: 'Your favourite party outfit. Bright colours very welcome.',
     giftLabel: 'Gifts',
     giftValue: 'Your child coming is already the best part. No pressure on presents.',
 
@@ -117,7 +117,7 @@ export const invitation = {
     shareButton: 'Share this invitation',
     shareCopied: 'Link copied',
 
-    footer: 'See you on the dance floor.',
+    footer: 'We cannot wait to celebrate with you.',
   },
 } as const
 
