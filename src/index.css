@@ -1,0 +1,85 @@
+@import 'tailwindcss';
+
+/*
+  Direction artistique : voir DECISIONS.md D-003.
+  Thème sombre unique, assumé. Une invitation de soirée n'a pas de mode clair.
+
+  Règle de contraste appliquée partout :
+  le violet profond (--color-violet) tombe à ~3.4:1 sur le fond nuit, il ne porte
+  donc JAMAIS de texte courant. Il sert aux halos, fonds et bordures.
+  Le texte utilise ink, gold, aqua ou muted, tous au-dessus de 9:1.
+*/
+@theme {
+  --color-night: #06030f;
+  --color-night-2: #0d0620;
+  --color-surface: #150a2b;
+  --color-line: #2c1a4d;
+
+  --color-violet: #8b5cf6;
+  --color-neon: #d946ef;
+  --color-aqua: #22d3ee;
+  --color-gold: #ffd76e;
+  --color-silver: #d6deeb;
+
+  --color-ink: #f5f3ff;
+  --color-muted: #b9aeda;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-card: 1.5rem;
+
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-rise: rise 0.7s ease-out both;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-night);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-night);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Focus visible au clavier, non négociable. */
+:focus-visible {
+  outline: 2px solid var(--color-aqua);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+  Toutes les animations décoratives se coupent ici.
+  La page doit rester entièrement lisible sans une seule d'entre elles.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
