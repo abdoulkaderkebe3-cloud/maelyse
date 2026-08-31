@@ -1,17 +1,19 @@
 import { useState } from 'react'
-import { invitation } from '../data/invitation'
-
-const { copy } = invitation
+import { copy, party } from '../config'
+import { useParty } from '../context/PartyContext'
+import { Spark } from './Spark'
 
 /** Partage natif sur téléphone, repli sur la copie du lien ailleurs. */
 export function ShareBar() {
+  const { playSound } = useParty()
   const [copied, setCopied] = useState(false)
 
   async function handleShare() {
+    playSound('pop')
     const url = window.location.href
     const shareData = {
-      title: `${invitation.firstName} turns ${invitation.age}`,
-      text: `${invitation.firstName} is turning ${invitation.age} on ${invitation.dayLabel}, ${invitation.dateLabel}. You are invited!`,
+      title: `${party.firstName} turns ${party.age}`,
+      text: `${party.firstName} is turning ${party.age} on ${party.dayLabel}, ${party.dateLabel}. You are invited!`,
       url,
     }
 
@@ -35,12 +37,15 @@ export function ShareBar() {
   }
 
   return (
-    <div className="text-center">
+    <div className="relative text-center">
+      {/* Étincelle 7 sur 9 */}
+      <Spark id="share" className="left-[12%] top-[10%]" />
+
       <p className="font-body text-sm text-muted">{copy.shareTitle}</p>
       <button
         type="button"
         onClick={handleShare}
-        className="mx-auto mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/80 px-6 font-body text-base font-medium text-ink transition-colors duration-200 ease-out hover:border-aqua/60 hover:text-aqua"
+        className="mx-auto mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-line bg-surface/80 px-6 font-body text-base font-medium text-ink transition-all duration-200 ease-out hover:border-aqua/60 hover:text-aqua active:scale-[0.97]"
       >
         <svg
           aria-hidden="true"

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
-import { invitation } from './data/invitation'
+import { copy } from './config'
+import { PartyProvider, useParty } from './context/PartyContext'
+
 import { Sky } from './components/Sky'
-import { Envelope } from './components/Envelope'
+import { Intro } from './components/Intro'
 import { Hero } from './components/Hero'
 import { Marquee } from './components/Marquee'
 import { Section } from './components/Section'
@@ -12,41 +14,56 @@ import { Cake } from './components/Cake'
 import { Details } from './components/Details'
 import { Plan } from './components/Plan'
 import { Location } from './components/Location'
-import { Rsvp } from './components/Rsvp'
 import { ShareBar } from './components/ShareBar'
 import { StickyCta } from './components/StickyCta'
 import { ScrollProgress } from './components/ScrollProgress'
+import { SparkCounter } from './components/SparkCounter'
+import { SoundToggle } from './components/SoundToggle'
+import { Spark } from './components/Spark'
+import { Victory } from './components/Victory'
 
-const { copy } = invitation
-const OPENED_KEY = 'maelyse-envelope-opened-v1'
+const INTRO_KEY = 'maelyse-intro-seen-v2'
 
-/** L'enveloppe ne se montre qu'à la première visite (voir D-003 et D-013). */
-function hasOpenedBefore() {
+/** L'ouverture ne se joue qu'à la première visite (voir Intro). */
+function hasSeenIntro() {
   try {
-    return window.localStorage.getItem(OPENED_KEY) === '1'
+    return window.localStorage.getItem(INTRO_KEY) === '1'
   } catch {
-    // Stockage bloqué : on montre l'enveloppe, c'est le comportement le plus joli.
+    // Stockage bloqué : on montre l'ouverture, c'est le comportement le plus joli.
     return false
   }
 }
 
-export default function App() {
-  const [envelopeDone, setEnvelopeDone] = useState(hasOpenedBefore)
+function Invitation() {
+  const { startAudio } = useParty()
+  const [introDone, setIntroDone] = useState(hasSeenIntro)
 
-  // L'invitation commence toujours en haut, quelle que soit la position
-  // de défilement restaurée par le navigateur.
+  // L'invitation commence toujours en haut, quelle que soit la position de
+  // défilement que le navigateur voudrait restaurer.
   useEffect(() => {
-    if (!envelopeDone) window.scrollTo(0, 0)
-  }, [envelopeDone])
+    if (!introDone) window.scrollTo(0, 0)
+  }, [introDone])
 
-  const handleOpened = useCallback(() => {
+  const finishIntro = useCallback(() => {
     try {
-      window.localStorage.setItem(OPENED_KEY, '1')
+      window.localStorage.setItem(INTRO_KEY, '1')
     } catch {
-      // Sans effet : l'enveloppe se remontrera à la prochaine visite, sans gravité.
+      // Sans effet : l'ouverture se rejouera à la prochaine visite.
     }
-    setEnvelopeDone(true)
+    setIntroDone(true)
   }, [])
+
+  // Les visiteurs de retour n'ont pas d'ouverture, donc pas de geste pour
+  // démarrer le son. Le premier appui sur la page s'en charge, une seule fois.
+  useEffect(() => {
+    if (!introDone) return
+    function onFirstGesture() {
+      startAudio()
+      window.removeEventListener('pointerdown', onFirstGesture)
+    }
+    window.addEventListener('pointerdown', onFirstGesture, { once: true })
+    return () => window.removeEventListener('pointerdown', onFirstGesture)
+  }, [introDone, startAudio])
 
   return (
     <>
@@ -54,17 +71,27 @@ export default function App() {
       <Sky />
 
       <AnimatePresence>
-        {!envelopeDone && <Envelope key="envelope" onOpened={handleOpened} />}
+        {!introDone && <Intro key="intro" onDone={finishIntro} />}
       </AnimatePresence>
 
+      {/* Commandes permanentes, hors du flux de lecture */}
+      {introDone && (
+        <>
+          <SoundToggle />
+          <SparkCounter />
+        </>
+      )}
+
       {/*
-        Tant que l'enveloppe est là, la page est masquée mais garde sa place :
-        le ciel étoilé et les ballons continuent de vivre derrière l'enveloppe,
-        sans que le contenu de l'invitation transparaisse au travers.
+        Tant que l'ouverture est là, la page est masquée mais garde sa place :
+        le ciel et les ballons continuent de vivre derrière, sans que le contenu
+        de l'invitation transparaisse au travers.
       */}
       <main
-        className={`relative transition-opacity duration-500 ${envelopeDone ? 'opacity-100' : 'invisible opacity-0'}`}
-        aria-hidden={!envelopeDone}
+        className={`relative transition-opacity duration-500 ${
+          introDone ? 'opacity-100' : 'invisible opacity-0'
+        }`}
+        aria-hidden={!introDone}
       >
         <Hero />
 
@@ -95,19 +122,16 @@ export default function App() {
           </Reveal>
         </Section>
 
-        <Section id="rsvp" title={copy.rsvpTitle}>
-          <Reveal direction="blur">
-            <Rsvp />
-          </Reveal>
-        </Section>
-
         <Section>
           <Reveal direction="up">
             <ShareBar />
           </Reveal>
         </Section>
 
-        <footer className="px-5 pb-24 pt-4 text-center sm:pb-14">
+        <footer className="relative px-5 pb-24 pt-4 text-center sm:pb-14">
+          {/* Étincelle 8 sur 9, la dernière cachée. La neuvième est sur le gâteau. */}
+          <Spark id="footer" className="right-[16%] top-[6%]" />
+
           <Reveal direction="blur" distance={16}>
             <p className="font-display text-lg tracking-wide text-muted">{copy.footer}</p>
           </Reveal>
@@ -115,6 +139,15 @@ export default function App() {
       </main>
 
       <StickyCta />
+      <Victory />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <PartyProvider>
+      <Invitation />
+    </PartyProvider>
   )
 }

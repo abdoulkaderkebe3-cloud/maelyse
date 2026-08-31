@@ -1,35 +1,30 @@
 import { motion } from 'motion/react'
+import { copy, mapsLink, venue } from '../config'
 import { useAnimateInView } from '../hooks/useAnimateInView'
-import { invitation, mapsLink } from '../data/invitation'
-
-const { copy } = invitation
-const { latitude, longitude, city } = invitation.location
+import { Spark } from './Spark'
 
 /**
- * Carte du lieu.
+ * Le lieu.
  *
- * Il n'y a volontairement PAS de carte Google intégrée ici. Deux raisons, et une
- * troisième qui s'est révélée fausse, notée pour que personne ne la reprenne :
+ * RÈGLE ABSOLUE : les coordonnées GPS ne s'affichent JAMAIS à l'écran. Elles ne
+ * vivent que dans le lien du bouton. Ce qu'un parent lit, c'est un nom et une
+ * adresse en toutes lettres, celle qu'il peut dire à un chauffeur de taxi.
+ * « 5.33108, -3.94457 » n'aide personne à venir.
  *
- * 1. Le geste attendu est « je touche et j'arrive dans Google Maps ». La carte
- *    intégrée était recouverte d'un lien, donc impossible à manipuler sur place :
- *    elle ne servait qu'à faire joli, mal, en gris au milieu d'une page nuit.
- * 2. C'est une intégration tierce qui télécharge ses propres scripts et ses
- *    tuiles, sur une connexion qui est souvent une 4G moyenne.
- * 3. ⚠️ FAUSSE PISTE : j'avais conclu qu'elle divisait par deux les images par
- *    seconde de la page. C'était un artefact de mesure, l'onglet mesuré n'étant
- *    pas au premier plan. Vérifié ensuite proprement : 144 images par seconde
- *    avec ou sans elle. L'iframe ne coûtait rien en fluidité.
- *
- * À la place, un repère dessiné : aucune rue inventée, juste un point qui pulse,
- * les coordonnées réelles, et un lien qui ouvre la vraie carte.
+ * Il n'y a pas non plus de carte Google intégrée : elle serait recouverte d'un
+ * lien donc inutilisable sur place, elle jure en gris au milieu d'une page nuit,
+ * et c'est une intégration tierce qui télécharge ses propres scripts sur une
+ * connexion qui est souvent une 4G moyenne. À la place, un repère dessiné, sans
+ * rue inventée.
  */
 export function Location() {
   const { ref, animate } = useAnimateInView<HTMLDivElement>()
-  const reduced = !animate
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="relative">
+      {/* Étincelle 6 sur 9, accrochée au coin de la carte */}
+      <Spark id="venue" className="left-[6%] top-[6%]" />
+
       <a
         href={mapsLink}
         target="_blank"
@@ -37,7 +32,7 @@ export function Location() {
         aria-label={copy.openMaps}
         className="group relative block overflow-hidden rounded-card border border-line bg-gradient-to-b from-[#1a0f33] to-[#0c0620] p-8 shadow-[0_0_50px_rgba(139,92,246,.18)] transition-colors duration-200 hover:border-aqua/50"
       >
-        {/* Cercles concentriques : un repère, pas une carte. */}
+        {/* Cercles concentriques : un repère, pas une carte */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
           {[0, 1, 2].map((ring) => (
             <motion.span
@@ -49,20 +44,15 @@ export function Location() {
                 marginLeft: -(60 + ring * 55),
                 marginTop: -(60 + ring * 55),
               }}
-              animate={reduced ? undefined : { opacity: [0.15, 0.5, 0.15] }}
-              transition={{
-                duration: 3.2,
-                delay: ring * 0.55,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
+              animate={animate ? { opacity: [0.15, 0.5, 0.15] } : undefined}
+              transition={{ duration: 3.2, delay: ring * 0.55, repeat: Infinity, ease: 'easeInOut' }}
             />
           ))}
         </div>
 
-        <div className="relative flex flex-col items-center py-6 text-center">
+        <div className="relative flex flex-col items-center py-4 text-center">
           {/* Onde qui part du repère */}
-          {!reduced && (
+          {animate && (
             <motion.span
               aria-hidden="true"
               className="absolute top-0 h-12 w-12 rounded-full bg-neon/30"
@@ -71,19 +61,15 @@ export function Location() {
             />
           )}
 
-          {/* Le repère */}
           <motion.svg
             aria-hidden="true"
             viewBox="0 0 24 24"
             fill="none"
             className="relative h-12 w-12 drop-shadow-[0_0_18px_rgba(217,70,239,.7)]"
-            animate={reduced ? undefined : { y: [0, -5, 0] }}
+            animate={animate ? { y: [0, -5, 0] } : undefined}
             transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <path
-              d="M12 22s7.5-6.1 7.5-12a7.5 7.5 0 1 0-15 0c0 5.9 7.5 12 7.5 12Z"
-              fill="url(#pin)"
-            />
+            <path d="M12 22s7.5-6.1 7.5-12a7.5 7.5 0 1 0-15 0c0 5.9 7.5 12 7.5 12Z" fill="url(#pin)" />
             <circle cx="12" cy="10" r="2.8" fill="#1a0930" />
             <defs>
               <linearGradient id="pin" x1="12" y1="0" x2="12" y2="22" gradientUnits="userSpaceOnUse">
@@ -93,10 +79,15 @@ export function Location() {
             </defs>
           </motion.svg>
 
-          <p className="mt-4 font-display text-2xl text-ink">{city}</p>
-          <p className="mt-1 font-body text-sm tabular-nums text-muted">
-            {latitude.toFixed(5)}, {longitude.toFixed(5)}
-          </p>
+          <p className="mt-4 font-display text-2xl leading-tight text-ink sm:text-3xl">{venue.name}</p>
+          {venue.address && (
+            <p className="mt-1 max-w-xs text-balance font-body text-base text-muted">
+              {venue.address}
+            </p>
+          )}
+          {venue.hint && (
+            <p className="mt-1 max-w-xs text-balance font-body text-sm text-muted/80">{venue.hint}</p>
+          )}
 
           <span className="mt-5 inline-flex min-h-[44px] items-center rounded-full border border-aqua/40 px-5 font-body text-xs uppercase tracking-[0.2em] text-aqua transition-colors duration-200 group-hover:border-aqua group-hover:bg-aqua/10">
             {copy.locationHint}
@@ -108,7 +99,7 @@ export function Location() {
         href={mapsLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-neon to-violet px-6 font-body text-base font-semibold text-white shadow-[0_0_28px_rgba(217,70,239,.35)] transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.98]"
+        className="mt-4 flex min-h-[52px] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-neon to-violet px-6 font-body text-base font-semibold text-white shadow-[0_0_28px_rgba(217,70,239,.35)] transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.97]"
       >
         <svg
           aria-hidden="true"

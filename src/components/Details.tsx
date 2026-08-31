@@ -1,20 +1,15 @@
-import { motion, useReducedMotion } from 'motion/react'
-import { invitation } from '../data/invitation'
+import { motion } from 'motion/react'
+import { copy, party, venue } from '../config'
 import { Stagger, staggerItem } from './Reveal'
-
-const { copy } = invitation
+import { Spark } from './Spark'
 
 function Row({ label, value, muted = false }: { label: string; value: string; muted?: boolean }) {
-  const reduced = useReducedMotion()
-
   return (
     <motion.div
-      variants={reduced ? undefined : staggerItem}
+      variants={staggerItem}
       className="flex flex-col gap-1 border-b border-line/60 py-4 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-6"
     >
-      <span className="min-w-28 font-body text-xs uppercase tracking-[0.22em] text-aqua">
-        {label}
-      </span>
+      <span className="min-w-28 font-body text-xs uppercase tracking-[0.22em] text-aqua">{label}</span>
       <span className={`font-body text-base leading-relaxed ${muted ? 'text-muted' : 'text-ink'}`}>
         {value}
       </span>
@@ -22,20 +17,32 @@ function Row({ label, value, muted = false }: { label: string; value: string; mu
   )
 }
 
+/** Le bloc que les parents lisent vraiment. */
 export function Details() {
-  const time =
-    invitation.startTime && invitation.endTime
-      ? `${invitation.startTime} to ${invitation.endTime}`
-      : invitation.startTime ?? copy.timeUnknown
+  // Trois cas : une plage complète, une heure de début seule, ou rien.
+  // Kader a choisi de ne pas annoncer d'heure de fin, c'est le cas du milieu.
+  const time = !party.startTime
+    ? copy.timeUnknown
+    : party.endTime
+      ? `${party.startTime} to ${party.endTime}`
+      : copy.timeFrom.replace('{time}', party.startTime)
 
   return (
-    <Stagger className="rounded-card border border-line bg-surface/85 px-5 py-2 sm:px-8">
-      <Row label={copy.whenLabel} value={`${invitation.dayLabel}, ${invitation.dateLabel}`} />
-      <Row label={copy.timeLabel} value={time} muted={!invitation.startTime} />
-      <Row label={copy.whereLabel} value={copy.whereValue} />
-      <Row label={copy.dressCodeLabel} value={copy.dressCodeValue} />
-      <Row label={copy.parentsLabel} value={copy.parentsValue} />
-      <Row label={copy.giftLabel} value={copy.giftValue} />
-    </Stagger>
+    <div className="relative">
+      {/* Étincelle 4 sur 9, dans la marge du bloc d'informations */}
+      <Spark id="details" className="right-[3%] top-[14%]" />
+
+      <Stagger className="rounded-card border border-line bg-surface/85 px-5 py-2 sm:px-8">
+        <Row label={copy.whenLabel} value={`${party.dayLabel}, ${party.dateLabel}`} />
+        <Row label={copy.timeLabel} value={time} muted={!party.startTime} />
+        {/* L'adresse est facultative : sans elle, la ligne se réduit au nom du lieu. */}
+        <Row
+          label={copy.whereLabel}
+          value={venue.address ? `${venue.name} — ${venue.address}` : venue.name}
+        />
+        <Row label={copy.dressCodeLabel} value={copy.dressCodeValue} />
+        <Row label={copy.giftLabel} value={copy.giftValue} />
+      </Stagger>
+    </div>
   )
 }
