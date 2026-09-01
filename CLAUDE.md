@@ -13,7 +13,7 @@ Invitation d'anniversaire en ligne, une page unique partagée par lien WhatsApp,
 
 | | |
 |---|---|
-| **Qui** | Maelyse Kadyjat |
+| **Qui** | Maëlys Kadyjat |
 | **Âge** | 9 ans |
 | **Quand** | **samedi 5 septembre 2026** |
 | **Où** | Abidjan, coordonnées GPS `5.3310823, -3.9445682` (zone est d'Abidjan, vers Bingerville) |

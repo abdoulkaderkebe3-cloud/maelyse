@@ -19,7 +19,7 @@
 
 ## D-002 - 2026-08-31 : Destination des réponses RSVP - **TRANCHÉE : WhatsApp pré-rempli, aucun backend**
 
-**Décision :** le formulaire construit un message en anglais ("Hi! Aya will be at Maelyse's birthday, coming with 1 adult") et ouvre WhatsApp vers le numéro de l'organisateur via `https://wa.me/<numero>?text=<message>`. Aucune base de données, aucune clé, aucun compte.
+**Décision :** le formulaire construit un message en anglais ("Hi! Aya will be at Maëlys's birthday, coming with 1 adult") et ouvre WhatsApp vers le numéro de l'organisateur via `https://wa.me/<numero>?text=<message>`. Aucune base de données, aucune clé, aucun compte.
 
 **Raison :** l'échéance est à J-5 (voir D-006). L'option Supabase demandait une table, des règles RLS correctes, un écran d'administration et des tests de sécurité, soit une journée de plus, sur le chemin critique, pour une fête d'enfant où l'organisateur comptera de toute façon les réponses lui-même. C'est aussi la solution retenue sur `gshop`, et c'est le canal que les parents utilisent déjà.
 
@@ -51,7 +51,7 @@
 
 **Contexte :** le brief transmis décrivait "Digital Invitations DZ", un **service** de faire-part numériques, tout en listant les fonctionnalités **d'une invitation** (compte à rebours, RSVP, galerie, Maps). Ce sont deux produits différents : une vitrine vend (exemples, tarifs, contact), une invitation informe et collecte.
 
-**Décision :** on construit **l'invitation**. Kader a donné le prénom, l'âge, la date et le lieu réels : c'est une vraie fête, le samedi 5 septembre 2026, pour Maelyse Kadyjat, 9 ans, à Abidjan.
+**Décision :** on construit **l'invitation**. Kader a donné le prénom, l'âge, la date et le lieu réels : c'est une vraie fête, le samedi 5 septembre 2026, pour Maëlys Kadyjat, 9 ans, à Abidjan.
 
 **Le brief "Digital Invitations DZ" est donc utilisé comme référence visuelle et fonctionnelle, pas comme cahier des charges de produit.** Le "DZ" (Algérie) n'est pas repris, la fête est à Abidjan.
 
@@ -431,7 +431,7 @@ Le temps de pause passe donc de **20 ms à environ une seconde**. Mesure réelle
 
 **Ce qui a été retiré :**
 
-- **Le bandeau défilant.** Il répétait en boucle « Maelyse · turns 9 · September 5th · you are invited », c'est-à-dire mot pour mot ce que le hero dit juste au-dessus. C'est le motif numéro un des pages générées.
+- **Le bandeau défilant.** Il répétait en boucle « Maëlys · turns 9 · September 5th · you are invited », c'est-à-dire mot pour mot ce que le hero dit juste au-dessus. C'est le motif numéro un des pages générées.
 - **Le dégradé arc-en-ciel animé du grand « 9 »**, dans le hero et dans l'ouverture. Remplacé par un or plein. Le chiffre gagne en présence en perdant son effet.
 - **Le balayage lumineux des tuiles du compte à rebours.** Quatre tuiles côte à côte, donc quatre projecteurs qui passaient en permanence pendant qu'on essayait de lire quatre nombres.
 - **Les boutons en dégradé magenta vers violet avec halo néon**, l'autre grande signature. Remplacés par un aplat or avec texte sombre.
@@ -480,3 +480,19 @@ Le paquet passe de 382,6 à 370,6 Ko, la feuille de style de 55,4 à 48,0 Ko.
 **Question de droits, réglée :** « Happy Birthday to You » est dans le domaine public. La revendication de Warner/Chappell a été invalidée par la justice américaine en 2015 et abandonnée en 2016.
 
 **Vérification :** je ne peux pas écouter la page, donc j'ai espionné les oscillateurs créés par le moteur audio et relevé leurs fréquences. Suite obtenue, convertie en noms de notes : `G4 G4 A4 G4 C5 B4 | G4 G4 A4 G4 D5 C5 | G4 G4 G5 E5 C5 B4 A4 | F5 F5 E5 C5 D5 C5`, aux bons intervalles de temps, en boucle. C'est bien Happy Birthday en entier. Le bouton de coupure a aussi été testé : zéro note programmée pendant la coupure, la musique repart à la réactivation.
+
+---
+
+## D-034 - 2026-09-01 : Le prénom s'écrit « Maëlys »
+
+**Correction de Kader :** la fille s'appelle **Maëlys**, pas « Maelyse ». Le prénom était faux depuis D-005, donc depuis la première ligne de contenu, et il n'avait jamais été relu par personne d'autre que moi.
+
+**Ce qui change à l'écran :** `party.firstName` et `party.fullName` dans `src/config.ts`, le titre et les métadonnées Open Graph de `index.html`, le titre du `README.md`, et **l'image d'aperçu WhatsApp `public/og.jpeg`**, régénérée depuis `design/og-source.html` puisque le nom y est gravé dans le pixel.
+
+**Ce qui ne change pas, volontairement :**
+- **L'URL `https://maelyse.vercel.app` et le dépôt `maelyse`.** Ce sont des identifiants externes : renommer le domaine casse le lien s'il a déjà été partagé, et c'est une décision de Kader, pas une conséquence d'une faute d'orthographe. À trancher avant l'envoi du lien.
+- **La clé de stockage local `maelyse-muted-v1`** dans `src/lib/sound.ts`. Elle n'est jamais lue par un humain, et la renommer ferait juste oublier son réglage de son à qui a déjà visité la page.
+
+**Le tréma tient la route, vérifié à l'écran.** Deux risques réels : l'ouverture assemble le prénom **lettre par lettre** (`firstName.split('')`, six lettres maintenant au lieu de sept) et le hero l'anime en 3D caractère par caractère, avec un interligne serré à 1,05 qui pouvait rogner le point du haut. Capture faite en 390 px puis en 1280 px : « Maëlys Kadyjat » tient sur une ligne dans les deux cas, le tréma est entier, 0 erreur console. Le caractère est écrit en forme précomposée (U+00EB, deux octets), et pas en « e » suivi d'un tréma combinant, qui aurait compté pour deux lettres dans l'animation.
+
+**La leçon :** un prénom donné à l'oral dans un chat n'est pas une donnée vérifiée. Il valait un aller-retour de confirmation le premier jour, comme l'heure et le lieu en ont eu un.

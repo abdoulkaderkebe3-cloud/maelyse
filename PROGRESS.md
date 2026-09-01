@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-09-01 09:30
+> Dernière mise à jour : 2026-09-01 21:35
 
 ## État global
 **L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
@@ -7,6 +7,12 @@
 **Plus rien ne bloque l'envoi du lien.** Le dernier point ouvert, le nom du lieu, est tranché : ce sera « Abidjan », rien de plus (D-026).
 
 ✅ **Tout est commité, poussé et EN LIGNE sur https://maelyse.vercel.app.** Vérifié sur le site public : « From 2:00 PM », « Abidjan », programme natation et poterie, aucune section de réponse, gâteau correct, aucun trait noir sur le compte à rebours, 0 erreur console, aucun débordement horizontal.
+
+**Le prénom était mal orthographié depuis le premier jour.** Kader a corrigé le 2026-09-01 : c'est **Maëlys**, pas « Maelyse ». Corrigé partout dans le contenu, image d'aperçu WhatsApp régénérée (D-034).
+
+⚠️ **Non commité, non poussé.** Le site en ligne affiche encore l'ancienne orthographe tant que Kader n'a pas demandé le push.
+
+⚠️ **Question ouverte pour Kader :** l'URL reste `https://maelyse.vercel.app` et le dépôt s'appelle `maelyse`. À trancher **avant** d'envoyer le lien, parce qu'un renommage après partage casse les liens déjà envoyés.
 
 **Le lien est prêt à être envoyé aux invités.**
 
@@ -42,6 +48,7 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - [x] **Fluidité doublée** : 13,8 ms par image contre 28,0 à processeur bridé 4x. Paquet de 382,6 à 370,6 Ko
 - [x] **Musique de fond remplacée par « Happy Birthday »** (D-033), toujours synthétisée donc zéro octet ajouté, avec 5,5 s de silence entre deux boucles
 - [x] Meta description et Open Graph mis à jour, ils ne promettent plus de répondre
+- [x] **Prénom corrigé en « Maëlys »** (D-034) : `config.ts`, `index.html`, `README.md`, `og-source.html`, et **`public/og.jpeg` régénérée**. Tréma vérifié à l'écran en 390 px et 1280 px, il n'est pas rogné
 - [x] Build vert (`npm run build`), vérifié au navigateur en 390px et 1440px, **0 erreur console, 0 débordement horizontal**
 
 ## En cours
@@ -76,6 +83,7 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **D-031 dépouillement, la page ressemblait à un site généré**
 - **D-032 le compteur « 1 / 9 » était la preuve du problème**
 - **D-033 la musique de fond devient « Happy Birthday »**
+- **D-034 le prénom s'écrit « Maëlys », l'URL et le dépôt gardent l'ancienne graphie**
 
 ## Pièges rencontrés et solutions
 - **Un travail non commité n'existe pas.** À la reprise du 2026-08-31, deux heures de refonte (config unique, son, jeu des étincelles) ont été retrouvées dans l'arbre de travail : jamais commitées, jamais documentées, et donc absentes du site en ligne alors que PROGRESS.md annonçait le contraire. Commiter est ce qui rend un travail réel.
@@ -92,6 +100,8 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **`mx-auto` ne centre pas un élément plus large que son parent.** Les marges automatiques ne deviennent jamais négatives : l'élément reste collé à gauche et ne déborde qu'à droite. Il faut `left-1/2` et `-translate-x-1/2`.
 - **Flex rétracte les éléments trop larges sans rien signaler.** Les neuf bougies en `w-8` étaient silencieusement ramenées à 27 px pour remplir la ligne, ce qui masquait le vrai problème : la rangée était plus large que le glaçage sur lequel elle est censée poser.
 - **Une capture pleine page ne montre pas les animations au défilement** : les blocs révélés à l'apparition restent à opacité zéro et la page paraît vide. Injecter une règle qui force l'opacité avant de capturer, sinon on croit à tort que le rendu est cassé.
+- **Un nom propre donné à l'oral n'est pas une donnée vérifiée.** Le prénom de l'enfant est resté faux du premier jour jusqu'à cinq jours de la fête, à travers 33 décisions et une mise en ligne. Les informations que personne ne peut recalculer (prénom, orthographe, numéro) méritent une confirmation explicite, au même titre que l'heure et le lieu.
+- **Une image gravée ne suit pas un changement de texte.** `public/og.jpeg` contenait l'ancien nom en pixels : le site corrigé aurait affiché la faute dans l'aperçu WhatsApp, c'est-à-dire à l'endroit le plus vu de tous. Toute correction de contenu impose de regarder ce qui est rendu en image.
 - **Le brief mélangeait deux produits** (vitrine et invitation) → tranché en D-004 avant tout code.
 - **Chrome traduisait la page en français à la volée** → `translate="no"` et meta notranslate.
 - **La protection de déploiement Vercel** rendait le lien inaccessible à tous sauf à Kader, invisible depuis un navigateur connecté → contrôler le code HTTP hors session.
@@ -101,7 +111,12 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **Le heredoc bash cale sur du TSX** → écriture directe de fichier pour ces cas.
 
 ## Notes importantes pour la prochaine session
-**Le travail est terminé et en ligne.** Deux commits poussés le 2026-08-31 : `ed47688` pour le code, `aca4596` pour le journal. Aucun trailer de co-auteur.
+**Deux choses attendent Kader, dans cet ordre :**
+
+1. **Décider du sort de l'URL.** Le site dit « Maëlys », le lien dit `maelyse.vercel.app`. Renommer le projet Vercel est faisable en une minute tant que le lien n'a pas circulé ; après, ça casse ce qui a été envoyé. Le dépôt GitHub `maelyse` peut être renommé aussi, GitHub garde une redirection.
+2. **Commiter et pousser.** Rien n'est commité pour l'instant, donc le site public affiche encore « Maelyse ». Un push sur `main` redéploie tout seul. Ne pas oublier de vérifier l'aperçu WhatsApp après, l'image OG a changé et les aperçus sont mis en cache par WhatsApp.
+
+**Historique :** deux commits poussés le 2026-08-31, `ed47688` pour le code et `aca4596` pour le journal. Aucun trailer de co-auteur.
 
 Plus aucun champ n'est en attente dans `src/config.ts`, tout le contenu est validé par Kader. Le dépôt est relié au projet Vercel, un push sur `main` redéploie tout seul.
 
