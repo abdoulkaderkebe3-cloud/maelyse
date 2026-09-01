@@ -21,10 +21,43 @@ export type SoundName = 'puff' | 'spark' | 'whoosh' | 'chime' | 'tap' | 'pop'
 
 const MUTE_KEY = 'maelyse-muted-v1'
 
-/** Gamme pentatonique majeure : impossible de sonner faux, idéal pour une boucle. */
-const PENTATONIC = [0, 2, 4, 7, 9]
-/** Suite d'accords très simple, en demi-tons depuis la fondamentale. */
-const PROGRESSION = [0, 0, -3, -3, 5, 5, -1, -1]
+/**
+ * « Happy Birthday to You », en do majeur, à trois temps.
+ *
+ * Chaque entrée est une note MIDI et une durée en noires. `null` est un silence.
+ * Do central = 60, donc sol4 = 67 et do5 = 72.
+ *
+ * Le morceau est dans le domaine public : la revendication de Warner/Chappell a
+ * été invalidée par la justice américaine en 2015 puis abandonnée en 2016.
+ *
+ * Pourquoi cette mélodie plutôt que la boucle pentatonique d'avant : elle était
+ * jolie mais anonyme, elle aurait pu accompagner n'importe quelle page. Trois
+ * notes de Happy Birthday et un parent sait ce qu'il vient d'ouvrir, sans lire
+ * une ligne.
+ */
+const HAPPY_BIRTHDAY: readonly (readonly [number | null, number])[] = [
+  // Levée, puis « Happy birthday to you »
+  [67, 0.5], [67, 0.5],
+  [69, 1], [67, 1], [72, 1],
+  [71, 2],
+  // « Happy birthday to you »
+  [67, 0.5], [67, 0.5],
+  [69, 1], [67, 1], [74, 1],
+  [72, 2],
+  // « Happy birthday dear Maelyse »
+  [67, 0.5], [67, 0.5],
+  [79, 1], [76, 1], [72, 1],
+  [71, 1], [69, 1],
+  // « Happy birthday to you »
+  [77, 0.5], [77, 0.5],
+  [76, 1], [72, 1], [74, 1],
+  [72, 3],
+  // Le silence fait partie du morceau : sans lui, la boucle harcèle.
+  [null, 4],
+]
+
+/** Noires par minute. Volontairement lent : c'est une berceuse, pas une fanfare. */
+const TEMPO = 76
 
 function midiToFrequency(note: number) {
   return 440 * Math.pow(2, (note - 69) / 12)
@@ -38,6 +71,7 @@ class PartyAudio {
 
   private schedulerId = 0
   private nextNoteTime = 0
+  /** Index de la note en cours dans HAPPY_BIRTHDAY. */
   private step = 0
   private musicOn = false
 
@@ -239,34 +273,35 @@ class PartyAudio {
   }
 
   /**
-   * Boîte à musique de fond.
+   * Boîte à musique de fond : « Happy Birthday », en boucle.
    *
-   * Un ordonnanceur regarde 200 ms devant lui et programme les notes à l'avance :
-   * si on se contentait d'un minuteur, le rythme tremblerait à chaque fois que le
-   * navigateur est occupé ailleurs.
+   * Un ordonnanceur regarde 200 ms devant lui et programme les notes à l'avance.
+   * C'est indispensable : si on se contentait d'un minuteur pour jouer chaque
+   * note au moment voulu, le rythme tremblerait à chaque fois que le navigateur
+   * est occupé ailleurs. Ici les notes sont posées à l'avance sur l'horloge
+   * audio, qui, elle, ne tremble pas.
    */
   startMusic() {
     if (!this.ready || !this.ctx || this.musicOn) return
     this.musicOn = true
-    this.nextNoteTime = this.ctx.currentTime + 0.1
+    this.nextNoteTime = this.ctx.currentTime + 0.15
     this.step = 0
 
-    const secondsPerStep = 60 / 96 / 2 // doubles croches à 96 battements par minute
+    const secondsPerBeat = 60 / TEMPO
 
     this.schedulerId = window.setInterval(() => {
       if (!this.ctx || !this.musicBus) return
       while (this.nextNoteTime < this.ctx.currentTime + 0.2) {
-        const chord = PROGRESSION[Math.floor(this.step / 8) % PROGRESSION.length]
-        const degree = PENTATONIC[this.step % PENTATONIC.length]
-        const octave = this.step % 16 < 8 ? 0 : 12
-        const note = 72 + chord + degree + octave
+        const [note, beats] = HAPPY_BIRTHDAY[this.step % HAPPY_BIRTHDAY.length]
+        const seconds = beats * secondsPerBeat
 
-        // Une note sur trois est sautée : ça respire au lieu de mitrailler.
-        if (this.step % 3 !== 2) {
-          this.bell(midiToFrequency(note), this.nextNoteTime, 0.3, 1.9, this.musicBus)
+        if (note !== null) {
+          // La résonance dépasse la durée écrite : les notes se recouvrent un
+          // peu, ce qui donne l'harmonie naturelle d'une vraie boîte à musique.
+          this.bell(midiToFrequency(note), this.nextNoteTime, 0.3, seconds + 1.3, this.musicBus)
         }
 
-        this.nextNoteTime += secondsPerStep
+        this.nextNoteTime += seconds
         this.step += 1
       }
     }, 60)

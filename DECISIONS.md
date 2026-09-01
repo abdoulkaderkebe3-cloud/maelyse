@@ -462,3 +462,21 @@ Le paquet passe de 382,6 à 370,6 Ko, la feuille de style de 55,4 à 48,0 Ko.
 **Pourquoi c'est la bonne question :** si le propriétaire du site doit demander à quoi sert un élément de son interface, un parent qui reçoit le lien sur WhatsApp ne se le demandera même pas, il l'ignorera. Un élément d'interface qui a besoin d'être expliqué et qui ne l'est pas est un élément à retirer.
 
 **La leçon, pour les prochains projets :** le jeu était une bonne idée mal introduite. Il a été ajouté en D-022 sans jamais être validé par Kader, et sans une seule ligne à l'écran pour l'annoncer. Une fonctionnalité que personne n'a demandée et que rien n'explique finit toujours par être un élément décoratif de plus.
+
+---
+
+## D-033 - 2026-09-01 : La musique de fond devient « Happy Birthday »
+
+**Demande de Kader :** changer la musique de fond.
+
+**Ce qu'il y avait :** une boucle générée au vol, notes de boîte à musique tirées d'une gamme pentatonique sur une suite d'accords, à 96 battements par minute. Impossible de sonner faux, et c'était le problème : **c'était joli et anonyme**, ça aurait pu accompagner n'importe quelle page.
+
+**Ce qu'il y a maintenant :** la mélodie de « Happy Birthday to You », en do majeur, à 76 battements par minute, sur le même timbre de boîte à musique. Trois notes suffisent à ce qu'un parent sache ce qu'il vient d'ouvrir, sans lire une ligne.
+
+**Toujours zéro octet.** La mélodie est un tableau de 25 couples note MIDI et durée, jouée par le même synthétiseur Web Audio. Le paquet ne bouge pas : 117,33 Ko compressés avant comme après. Un MP3 d'une minute aurait pesé environ 700 Ko, soit plus du double de toute la page, sur des téléphones en 4G moyenne.
+
+**Le silence fait partie du morceau.** Une entrée `[null, 4]` termine le tableau : la dernière note tenue trois temps, puis quatre temps de vide. Mesuré à **5,5 secondes** entre la fin d'un tour et le début du suivant. Sans ce repos, une mélodie aussi reconnaissable devient un harcèlement au bout de deux boucles.
+
+**Question de droits, réglée :** « Happy Birthday to You » est dans le domaine public. La revendication de Warner/Chappell a été invalidée par la justice américaine en 2015 et abandonnée en 2016.
+
+**Vérification :** je ne peux pas écouter la page, donc j'ai espionné les oscillateurs créés par le moteur audio et relevé leurs fréquences. Suite obtenue, convertie en noms de notes : `G4 G4 A4 G4 C5 B4 | G4 G4 A4 G4 D5 C5 | G4 G4 G5 E5 C5 B4 A4 | F5 F5 E5 C5 D5 C5`, aux bons intervalles de temps, en boucle. C'est bien Happy Birthday en entier. Le bouton de coupure a aussi été testé : zéro note programmée pendant la coupure, la musique repart à la réactivation.

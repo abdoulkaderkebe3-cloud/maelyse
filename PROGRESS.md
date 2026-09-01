@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-09-01 01:20
+> Dernière mise à jour : 2026-09-01 09:30
 
 ## État global
 **L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
@@ -13,7 +13,7 @@
 La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 
 ## Fait
-- [x] Structure de continuité, 32 décisions actées (D-001 à D-032)
+- [x] Structure de continuité, 33 décisions actées (D-001 à D-033)
 - [x] Vite 8 + React 19 + TypeScript strict + Tailwind v4
 - [x] **`src/config.ts`, fichier de configuration unique** (D-021) : palette, fête, lieu, jeu, son, programme, tous les textes. Il remplace `src/data/invitation.ts`
 - [x] **Ouverture cinématique** `Intro.tsx`, première visite seulement
@@ -40,6 +40,7 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - [x] **Jeu des neuf étincelles retiré en entier** (D-031, D-032) : cinq composants supprimés, la moitié de `PartyContext`
 - [x] **Contraste du bouton principal réparé** : blanc sur dégradé magenta à 2,6:1, désormais texte sombre sur or à environ 14:1
 - [x] **Fluidité doublée** : 13,8 ms par image contre 28,0 à processeur bridé 4x. Paquet de 382,6 à 370,6 Ko
+- [x] **Musique de fond remplacée par « Happy Birthday »** (D-033), toujours synthétisée donc zéro octet ajouté, avec 5,5 s de silence entre deux boucles
 - [x] Meta description et Open Graph mis à jour, ils ne promettent plus de répondre
 - [x] Build vert (`npm run build`), vérifié au navigateur en 390px et 1440px, **0 erreur console, 0 débordement horizontal**
 
@@ -74,12 +75,14 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 - **D-030 le décor ne coûte rien, mesuré une deuxième fois**
 - **D-031 dépouillement, la page ressemblait à un site généré**
 - **D-032 le compteur « 1 / 9 » était la preuve du problème**
+- **D-033 la musique de fond devient « Happy Birthday »**
 
 ## Pièges rencontrés et solutions
 - **Un travail non commité n'existe pas.** À la reprise du 2026-08-31, deux heures de refonte (config unique, son, jeu des étincelles) ont été retrouvées dans l'arbre de travail : jamais commitées, jamais documentées, et donc absentes du site en ligne alors que PROGRESS.md annonçait le contraire. Commiter est ce qui rend un travail réel.
 - **PROGRESS.md peut mentir.** Il décrivait un état antérieur de deux heures au disque. À chaque reprise, croiser le journal avec `git status` et les dates de modification, pas seulement lire le journal.
 - **Le fuseau se vérifie.** `dateISO` était à 15h UTC pour une fête à 14h à Abidjan, qui est sur GMT. Le compte à rebours se serait trompé d'une heure sans que rien ne le signale.
 - **Retirer une section, c'est retirer tout ce qui pointait dessus.** Supprimer le formulaire imposait aussi le bouton du hero, la cible de la barre fixe basse, l'observateur d'intersection, les textes, le bloc de configuration et la description Open Graph.
+- **On peut vérifier un son sans l'entendre.** En espionnant les oscillateurs créés par le moteur audio et en convertissant leurs fréquences en noms de notes, on lit la mélodie jouée et son rythme. C'est la seule preuve possible quand on ne peut pas écouter la page.
 - **Les effets ne se paient pas qu'en crédibilité, ils se paient en millisecondes.** Retirer le bandeau défilant, les balayages, les étincelles et les lueurs a rendu la page deux fois plus fluide sans qu'on optimise une seule ligne.
 - **Ne jamais comparer deux mesures de fluidité prises à la suite sur la même page.** La première passe déclenche toutes les animations d'apparition, les suivantes non. Recharger, ou jeter une passe de chauffe. J'ai accusé le décor à tort sur cette base.
 - **Un élément d'interface que le propriétaire du site ne comprend pas est à retirer.** Kader a demandé à quoi servait le compteur « 1 / 9 » de sa propre invitation.
