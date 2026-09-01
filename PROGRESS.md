@@ -1,5 +1,5 @@
 # PROGRESS.md
-> Dernière mise à jour : 2026-09-01 21:35
+> Dernière mise à jour : 2026-09-01 21:55
 
 ## État global
 **L'invitation est complète côté contenu.** Kader a donné l'heure (14h), les deux activités (natation et poterie), et a décidé de retirer le formulaire de réponse et la ligne « For parents ».
@@ -10,7 +10,7 @@
 
 **Le prénom était mal orthographié depuis le premier jour.** Kader a corrigé le 2026-09-01 : c'est **Maëlys**, pas « Maelyse ». Corrigé partout dans le contenu, image d'aperçu WhatsApp régénérée (D-034).
 
-⚠️ **Non commité, non poussé.** Le site en ligne affiche encore l'ancienne orthographe tant que Kader n'a pas demandé le push.
+✅ **Commité, poussé et vérifié en ligne** (`6e40520` pour le code, `54a8bda` pour le journal). Redéploiement Vercel confirmé 15 secondes après le push : titre, meta description et Open Graph portent « Maëlys », `og.jpeg` servie est bien la nouvelle (84 847 octets, identique au fichier local), hero vérifié à l'écran en 390 px sur le site public, 0 erreur console.
 
 ⚠️ **Question ouverte pour Kader :** l'URL reste `https://maelyse.vercel.app` et le dépôt s'appelle `maelyse`. À trancher **avant** d'envoyer le lien, parce qu'un renommage après partage casse les liens déjà envoyés.
 
@@ -114,7 +114,7 @@ La fête est le **samedi 5 septembre 2026 à 14h**, il reste **5 jours**.
 **Deux choses attendent Kader, dans cet ordre :**
 
 1. **Décider du sort de l'URL.** Le site dit « Maëlys », le lien dit `maelyse.vercel.app`. Renommer le projet Vercel est faisable en une minute tant que le lien n'a pas circulé ; après, ça casse ce qui a été envoyé. Le dépôt GitHub `maelyse` peut être renommé aussi, GitHub garde une redirection.
-2. **Commiter et pousser.** Rien n'est commité pour l'instant, donc le site public affiche encore « Maelyse ». Un push sur `main` redéploie tout seul. Ne pas oublier de vérifier l'aperçu WhatsApp après, l'image OG a changé et les aperçus sont mis en cache par WhatsApp.
+2. **Vérifier l'aperçu WhatsApp sur un vrai téléphone.** L'image OG a changé et **WhatsApp met les aperçus en cache par URL** : un lien déjà partagé peut continuer à afficher l'ancienne image un moment. Coller le lien dans une conversation de test avant de l'envoyer aux parents.
 
 **Historique :** deux commits poussés le 2026-08-31, `ed47688` pour le code et `aca4596` pour le journal. Aucun trailer de co-auteur.
 

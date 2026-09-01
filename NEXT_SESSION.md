@@ -19,12 +19,13 @@ La page s'ouvre sur une enveloppe à toucher à chaque chargement, puis déroule
 
 ⚠️ **Ce qui vient de se passer, le 2026-09-01 :** Kader a corrigé le prénom de sa fille. Ce n'est pas « Maelyse » mais **« Maëlys »**. Faute présente depuis le premier jour, y compris sur le site en ligne. Corrigé dans `src/config.ts`, `index.html`, `README.md`, `design/og-source.html`, et **`public/og.jpeg` a été régénérée** parce que le nom y est gravé en pixels. Build vert, vérifié à l'écran en 390 px et 1280 px, le tréma n'est pas rogné, 0 erreur console (D-034).
 
-⚠️ **Rien n'est commité.** Le site public affiche encore « Maelyse ». Ne pousse que si Kader le demande.
+✅ **Commité, poussé et en ligne.** `6e40520` pour le code, `54a8bda` pour le journal, aucun trailer de co-auteur. Le site public affiche « Maëlys », vérifié à l'écran en 390 px, 0 erreur console.
 
-**Deux choses attendent une décision de Kader, dans cet ordre :**
+**Une décision attend Kader, et elle est urgente :**
 
-1. **Le sort de l'URL.** Le site dit « Maëlys », le lien dit `maelyse.vercel.app`, et le dépôt s'appelle `maelyse`. Renommer coûte une minute **tant que le lien n'a pas circulé**, et casse les liens déjà envoyés après. À trancher avant l'envoi aux parents.
-2. **Le commit et le push** de la correction, pour que le site en ligne porte le bon prénom. Après redéploiement, revérifier l'aperçu WhatsApp : l'image OG a changé et WhatsApp met les aperçus en cache.
+**Le sort de l'URL.** Le site dit « Maëlys », le lien dit `maelyse.vercel.app`, et le dépôt s'appelle `maelyse`. Renommer coûte une minute **tant que le lien n'a pas circulé**, et casse les liens déjà envoyés après. À trancher **avant** l'envoi aux parents, donc avant le 5 septembre.
+
+**Et une vérification à faire sur un vrai téléphone :** coller le lien dans une conversation WhatsApp de test. L'image OG a changé et WhatsApp met les aperçus en cache par URL, un lien déjà partagé peut montrer l'ancienne image un moment.
 
 ⚠️ **Réflexe à garder :** commence toujours par un `git status`. À une reprise précédente, deux heures de refonte traînaient dans l'arbre de travail sans commit, et le site en ligne était en retard sur le disque sans que le journal le dise.
 
