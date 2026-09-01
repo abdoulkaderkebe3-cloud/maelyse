@@ -80,7 +80,7 @@ function Invitation() {
         <Hero />
 
         {/*
-          Il y avait ici un bandeau défilant qui répétait en boucle « Maelyse ·
+          Il y avait ici un bandeau défilant qui répétait en boucle « Maëlys ·
           turns 9 · September 5th · you are invited », c'est-à-dire exactement ce
           que le hero vient de dire, juste au-dessus. Retiré : c'est le motif qui
           signale une page générée plutôt qu'une page dessinée (D-031).

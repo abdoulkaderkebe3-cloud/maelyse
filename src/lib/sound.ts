@@ -44,7 +44,7 @@ const HAPPY_BIRTHDAY: readonly (readonly [number | null, number])[] = [
   [67, 0.5], [67, 0.5],
   [69, 1], [67, 1], [74, 1],
   [72, 2],
-  // « Happy birthday dear Maelyse »
+  // « Happy birthday dear Maëlys »
   [67, 0.5], [67, 0.5],
   [79, 1], [76, 1], [72, 1],
   [71, 1], [69, 1],

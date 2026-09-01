@@ -50,9 +50,9 @@ export const palette = {
 
 export const party = {
   /** Prénom mis en avant, celui qui s'assemble à l'ouverture. */
-  firstName: 'Maelyse',
+  firstName: 'Maëlys',
   /** Nom complet, affiché une seule fois. */
-  fullName: 'Maelyse Kadyjat',
+  fullName: 'Maëlys Kadyjat',
   age: 9,
 
   /** Date et heure de la fête, en heure d'Abidjan (la Côte d'Ivoire est sur GMT). */

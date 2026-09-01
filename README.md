@@ -1,6 +1,6 @@
-# Invitation d'anniversaire - Maelyse Kadyjat
+# Invitation d'anniversaire - Maëlys Kadyjat
 
-Invitation en ligne pour les 9 ans de Maelyse, le samedi 5 septembre 2026 à Abidjan.
+Invitation en ligne pour les 9 ans de Maëlys, le samedi 5 septembre 2026 à Abidjan.
 Une page unique, en anglais, pensée pour être ouverte sur un téléphone depuis un lien WhatsApp.
 
 ## Stack
